@@ -3,4 +3,6 @@ export const login = async (email: string, password: string) => {
     method: "POST",
     body: JSON.stringify({ email, password }),
   })
+
+  console.log(response) // TODO: Remove this
 }

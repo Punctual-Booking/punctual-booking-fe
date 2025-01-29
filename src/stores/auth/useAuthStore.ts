@@ -18,6 +18,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null })
     try {
       // TODO: Implement actual login logic
+      console.log('email', email)
+      console.log('password', password)
       await new Promise(resolve => setTimeout(resolve, 1000))
       set({ isAuthenticated: true })
     } catch (error) {
@@ -30,6 +32,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null })
     try {
       // TODO: Implement actual registration logic
+      console.log('name', name)
+      console.log('email', email)
+      console.log('password', password)
       await new Promise(resolve => setTimeout(resolve, 1000))
       set({ isAuthenticated: true })
     } catch (error) {
@@ -42,6 +47,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null })
     try {
       // TODO: Implement actual logout logic
+      console.log('logout')
       await new Promise(resolve => setTimeout(resolve, 1000))
       set({ isAuthenticated: false })
     } catch (error) {

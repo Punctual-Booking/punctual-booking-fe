@@ -3,4 +3,6 @@ export const register = async (name: string, email: string, password: string) =>
     method: "POST",
     body: JSON.stringify({ name, email, password }),
   })
+  
+  console.log(response) // TODO: Remove this
 }
