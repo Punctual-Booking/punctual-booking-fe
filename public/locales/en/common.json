@@ -1,0 +1,27 @@
+{
+  "app": {
+    "name": "Punctual",
+    "description": "Manage your bookings with ease."
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "namePlaceholder": "Enter your name"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email address",
+    "password": {
+      "min": "Password must be at least {{min}} characters",
+      "requirements": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    },
+    "name": {
+      "min": "Name must be at least {{min}} characters"
+    }
+  }
+}
