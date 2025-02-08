@@ -3,6 +3,20 @@
     "name": "Punctual",
     "description": "Manage your bookings with ease."
   },
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "saving": "Saving...",
+    "confirmClose": "Discard changes?",
+    "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?"
+  },
   "auth": {
     "login": "Login",
     "register": "Register",
@@ -11,7 +25,8 @@
     "name": "Name",
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
-    "namePlaceholder": "Enter your name"
+    "namePlaceholder": "Enter your name",
+    "logout": "Logout"
   },
   "validation": {
     "required": "This field is required",
@@ -22,6 +37,157 @@
     },
     "name": {
       "min": "Name must be at least {{min}} characters"
+    },
+    "service": {
+      "name": "Name is required",
+      "description": "Description is required",
+      "price": "Price is required",
+      "image": "Please upload a valid image file"
     }
+  },
+  "admin": {
+    "welcome": "Welcome, {{name}}",
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "bookings": "Bookings",
+      "staff": "Staff",
+      "customers": "Customers",
+      "settings": "Settings",
+      "services": "Services"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "totalBookings": "Total Bookings",
+      "todayBookings": "Your next appointments",
+      "duration": "{{duration}} minutes"
+    },
+    "services": {
+      "title": "Services",
+      "addService": "Add Service",
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "image": "Image",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "modal": {
+        "addTitle": "Add New Service",
+        "editTitle": "Edit Service",
+        "description": "Fill in the service details below.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "confirmClose": "Discard changes?",
+        "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?"
+      }
+    },
+    "customers": {
+      "title": "Customers",
+      "name": "Name",
+      "email": "Email",
+      "createdAt": "Joined Date",
+      "listTitle": "Customer List",
+      "listDescription": "A list of all registered customers.",
+      "status": "Status",
+      "status_active": "Active",
+      "status_inactive": "Inactive"
+    },
+    "staff": {
+      "title": "Staff Members",
+      "addStaff": "Add Staff",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "actions": "Actions",
+      "selectRole": "Select a role",
+      "roles": {
+        "admin": "Administrator",
+        "staff": "Staff Member"
+      },
+      "modal": {
+        "addTitle": "Add Staff Member",
+        "editTitle": "Edit Staff Member",
+        "description": "Add or modify staff member details.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "confirmClose": "Discard changes?",
+        "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?"
+      },
+      "validation": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "business": {
+        "title": "Business Settings",
+        "info": "Business Information",
+        "name": "Business Name",
+        "description": "Description",
+        "openingTime": "Opening Time",
+        "closingTime": "Closing Time"
+      },
+      "booking": {
+        "title": "Booking Settings",
+        "minNotice": "Minimum Notice",
+        "maxNotice": "Maximum Notice",
+        "slotDuration": "Time Slot Duration",
+        "bufferTime": "Buffer Time",
+        "maxBookings": "Maximum Bookings per Slot"
+      },
+      "notifications": {
+        "title": "Notification Settings",
+        "emailTemplates": "Email Templates",
+        "bookingConfirmation": "Booking Confirmation",
+        "reminderTime": "Reminder Time",
+        "smsNotifications": "SMS Notifications",
+        "staffNotifications": "Staff Notifications"
+      },
+      "appearance": {
+        "title": "Appearance Settings",
+        "theme": "Theme",
+        "language": "Language",
+        "dateFormat": "Date Format",
+        "timeFormat": "Time Format",
+        "currency": "Currency"
+      },
+      "businessInfo": "Business Information",
+      "businessName": "Business Name",
+      "description": "Description",
+      "openingTime": "Opening Time",
+      "closingTime": "Closing Time"
+    },
+    "bookings": {
+      "title": "Bookings",
+      "newBooking": "New Booking",
+      "editBooking": "Edit Booking",
+      "customer": "Customer",
+      "selectCustomer": "Select a customer",
+      "service": "Service",
+      "selectService": "Select a service",
+      "staff": "Staff",
+      "selectStaff": "Select staff member",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "notes": "Notes",
+      "validation": {
+        "customerRequired": "Customer is required",
+        "serviceRequired": "Service is required",
+        "staffRequired": "Staff member is required"
+      }
+    }
+  },
+  "calendar": {
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "previous": "Previous",
+    "next": "Next",
+    "noEventsToDisplay": "No events to display",
+    "allDay": "All day",
+    "more": "more"
   }
 }

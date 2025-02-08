@@ -21,7 +21,9 @@
     "pages": "@/pages",
     "styles": "@/styles",
     "services": "@/services",
-    "stores": "@/stores"
+    "stores": "@/stores",
+    "types": "@/types",
+    "providers": "@/providers"
   },
   "iconLibrary": "lucide"
 }

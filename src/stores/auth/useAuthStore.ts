@@ -1,27 +1,40 @@
 import { create } from 'zustand'
+import { User, UserRole } from '@/types/auth'
 
 interface AuthState {
   isAuthenticated: boolean
   isLoading: boolean
   error: string | null
+  user: User | null
   login: (email: string, password: string) => Promise<void>
   register: (name: string, email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   clearError: () => void
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
+export const useAuthStore = create<AuthState>(set => ({
+  isAuthenticated: true, // TODO: Remove this
   isLoading: false,
   error: null,
+  user: {
+    // TODO: Remove this
+    id: '1',
+    name: 'Admin User',
+    email: 'admin@example.com',
+    role: 'admin' as UserRole,
+  },
   login: async (email, password) => {
     set({ isLoading: true, error: null })
+
     try {
-      // TODO: Implement actual login logic
-      console.log('email', email)
-      console.log('password', password)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      set({ isAuthenticated: true })
+      // TODO: Replace with actual API call
+      const mockUser = {
+        id: '1',
+        name: 'Admin User',
+        email,
+        role: 'admin' as UserRole,
+      }
+      set({ isAuthenticated: true, user: mockUser })
     } catch (error) {
       set({ error: 'Login failed' })
     } finally {
@@ -56,5 +69,5 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ isLoading: false })
     }
   },
-  clearError: () => set({ error: null })
-})) 
+  clearError: () => set({ error: null }),
+}))
