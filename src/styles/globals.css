@@ -69,17 +69,21 @@
 
 /* Calendar Container */
 .fc {
-  @apply h-full bg-background text-foreground;
+  @apply h-full bg-background text-foreground flex flex-col;
 }
 
 /* Time grid container */
+.fc .fc-timegrid {
+  @apply flex-1 min-h-0;
+}
+
 .fc .fc-timegrid-container {
-  @apply overflow-y-auto overflow-x-hidden;
+  @apply h-full overflow-y-auto overflow-x-hidden;
 }
 
 /* Sticky header */
 .fc .fc-col-header {
-  @apply sticky top-0 z-10 bg-background border-b overflow-hidden;
+  @apply sticky top-0 z-10 bg-background border-b;
 }
 
 /* Time grid */
@@ -87,18 +91,42 @@
   @apply h-12; /* Adjust time slot height */
 }
 
+.fc .fc-timegrid-slot-minor {
+  @apply border-b border-dashed border-border;
+}
+
 /* Time column */
 .fc .fc-timegrid-axis {
-  @apply sticky left-0 z-10 bg-background border-r min-w-[50px] text-center;
+  @apply border-2 bg-background;
 }
 
 .fc .fc-timegrid-axis-cushion {
-  @apply text-xs font-medium text-muted-foreground px-1;
+  @apply text-xs font-medium text-muted-foreground px-2;
+}
+
+.fc .fc-timegrid-slot-label {
+  @apply text-xs font-medium text-muted-foreground border-0;
+}
+
+.fc .fc-timegrid-axis-frame {
+  @apply h-[48px] flex items-center justify-center;
+}
+
+.fc .fc-timegrid-slot-label-cushion {
+  @apply text-xs font-medium text-muted-foreground;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  @apply text-xs font-medium text-muted-foreground px-2;
+}
+
+.fc .fc-event-time {
+  @apply block text-xs font-medium text-foreground/70;
 }
 
 /* Header Toolbar */
 .fc .fc-toolbar {
-  @apply mb-4 flex items-center justify-between gap-4 px-4 py-3 border-b;
+  @apply mb-4 flex items-center justify-between gap-4 px-4 py-3 border-b sticky top-0 bg-background z-20;
 }
 
 .fc .fc-toolbar-title {
@@ -111,7 +139,7 @@
 }
 
 .fc .fc-button-primary {
-  @apply px-3 py-2 text-sm font-medium transition-colors hover:bg-accent/50 border-0;
+  @apply px-3 py-2 text-sm font-medium transition-colors hover:bg-accent/50 border-0 text-foreground;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active {
@@ -148,32 +176,41 @@
 
 /* Events */
 .fc .fc-event {
-  @apply cursor-pointer rounded-sm border-none bg-primary px-2 py-1 shadow-sm transition-opacity hover:opacity-90;
+  @apply border border-border bg-card hover:bg-accent/50 hover:scale-[1.02] hover:shadow-md transition-all cursor-pointer;
+}
+
+.fc .fc-event-main {
+  @apply p-2;
 }
 
 .fc .fc-event-title {
-  @apply text-xs font-medium text-primary-foreground;
+  @apply text-sm font-medium text-foreground;
 }
 
 .fc .fc-event-time {
-  @apply text-xs font-medium text-primary-foreground/90;
+  @apply hidden;
+  /* @apply text-xs font-medium text-foreground/70; */
+}
+
+.fc .fc-event-description {
+  @apply text-xs text-foreground/60;
 }
 
 /* Event colors by status */
 .fc .fc-event.status-confirmed {
-  @apply bg-blue-300 text-white;
+  @apply border-l-4 border-l-green-500;
 }
 
 .fc .fc-event.status-pending {
-  @apply bg-yellow-500 text-black;
+  @apply border-l-4 border-l-yellow-500;
 }
 
 .fc .fc-event.status-completed {
-  @apply bg-green-600 text-white;
+  @apply border-l-4 border-l-blue-500;
 }
 
 .fc .fc-event.status-cancelled {
-  @apply bg-gray-500 text-white;
+  @apply border-l-4 border-l-destructive opacity-50;
 }
 
 .fc .fc-event.status-no-show {
@@ -190,5 +227,39 @@
 }
 
 .fc .fc-day-today .fc-col-header-cell-cushion {
-  @apply text-sm font-medium text-black;
+  @apply text-sm font-medium text-foreground;
+}
+
+.status-pending {
+  @apply border-l-4 border-l-yellow-500;
+}
+
+.status-confirmed {
+  @apply border-l-4 border-l-green-500;
+}
+
+.status-completed {
+  @apply border-l-4 border-l-blue-500;
+}
+
+.status-cancelled {
+  @apply border-l-4 border-l-destructive opacity-50;
+}
+
+/* Tooltip theme */
+.tippy-box[data-theme~='custom'] {
+  @apply bg-popover text-popover-foreground border border-border rounded-md shadow-md;
+}
+
+.tippy-box[data-theme~='custom'] .tippy-arrow {
+  @apply text-popover;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

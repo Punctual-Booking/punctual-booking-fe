@@ -1,7 +1,8 @@
 export interface Customer {
   id: string
   name: string
-  email: string
+  email?: string
+  phone: string
   createdAt: string
   status: 'active' | 'inactive'
 }
