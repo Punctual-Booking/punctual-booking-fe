@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
-export const LanguageSwitcher = () => {
+interface LanguageSwitcherProps {
+  className?: string
+}
+
+export const LanguageSwitcher = ({ className }: LanguageSwitcherProps) => {
   const { i18n } = useTranslation()
 
   const toggleLanguage = () => {
@@ -14,7 +19,7 @@ export const LanguageSwitcher = () => {
       variant="ghost"
       size="sm"
       onClick={toggleLanguage}
-      className="fixed top-4 right-4 gap-2"
+      className={cn('gap-2', className)}
     >
       {i18n.language === 'en' ? (
         <>

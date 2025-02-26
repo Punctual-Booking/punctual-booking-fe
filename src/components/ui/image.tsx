@@ -10,7 +10,7 @@ export const Image = ({
   src,
   alt,
   className,
-  fallback = '/placeholder.png',
+  fallback = 'https://placehold.co/100x100',
   aspectRatio = 'auto',
   ...props
 }: ImageProps) => {

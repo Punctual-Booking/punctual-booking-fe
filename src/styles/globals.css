@@ -27,7 +27,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
     --background: 20 14.3% 4.1%;
@@ -53,12 +53,211 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
-}
-@layer base {
   * {
     @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+.fc .fc-button {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2;
+}
+
+/* Calendar Container */
+.fc {
+  @apply h-full bg-background text-foreground flex flex-col;
+}
+
+/* Time grid container */
+.fc .fc-timegrid {
+  @apply flex-1 min-h-0;
+}
+
+.fc .fc-timegrid-container {
+  @apply h-full overflow-y-auto overflow-x-hidden;
+}
+
+/* Sticky header */
+.fc .fc-col-header {
+  @apply sticky top-0 z-10 bg-background border-b;
+}
+
+/* Time grid */
+.fc .fc-timegrid-slot {
+  @apply h-12; /* Adjust time slot height */
+}
+
+.fc .fc-timegrid-slot-minor {
+  @apply border-b border-dashed border-border;
+}
+
+/* Time column */
+.fc .fc-timegrid-axis {
+  @apply border-2 bg-background;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  @apply text-xs font-medium text-muted-foreground px-2;
+}
+
+.fc .fc-timegrid-slot-label {
+  @apply text-xs font-medium text-muted-foreground border-0;
+}
+
+.fc .fc-timegrid-axis-frame {
+  @apply h-[48px] flex items-center justify-center;
+}
+
+.fc .fc-timegrid-slot-label-cushion {
+  @apply text-xs font-medium text-muted-foreground;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  @apply text-xs font-medium text-muted-foreground px-2;
+}
+
+.fc .fc-event-time {
+  @apply block text-xs font-medium text-foreground/70;
+}
+
+/* Header Toolbar */
+.fc .fc-toolbar {
+  @apply mb-4 flex items-center justify-between gap-4 px-4 py-3 border-b sticky top-0 bg-background z-20;
+}
+
+.fc .fc-toolbar-title {
+  @apply text-lg font-medium;
+}
+
+/* Navigation Buttons Group */
+.fc .fc-button-group {
+  @apply inline-flex items-center rounded-lg bg-background shadow-sm border;
+}
+
+.fc .fc-button-primary {
+  @apply px-3 py-2 text-sm font-medium transition-colors hover:bg-accent/50 border-0 text-foreground;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  @apply bg-primary/10 text-primary hover:bg-primary/20;
+}
+
+/* Time Grid */
+.fc .fc-timegrid {
+  @apply border-0 shadow-sm rounded-lg bg-background;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  @apply text-xs font-medium text-muted-foreground;
+}
+
+/* Today Column */
+.fc .fc-day-today {
+  @apply bg-accent/5;
+}
+
+/* Current Time Indicator */
+.fc .fc-timegrid-now-indicator-line {
+  @apply border-primary;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+  @apply border-primary;
+}
+
+/* Week Numbers */
+.fc .fc-timegrid-axis {
+  @apply border-2 bg-background;
+}
+
+/* Events */
+.fc .fc-event {
+  @apply border border-border bg-card hover:bg-accent/50 hover:scale-[1.02] hover:shadow-md transition-all cursor-pointer;
+}
+
+.fc .fc-event-main {
+  @apply p-2;
+}
+
+.fc .fc-event-title {
+  @apply text-sm font-medium text-foreground;
+}
+
+.fc .fc-event-time {
+  @apply hidden;
+  /* @apply text-xs font-medium text-foreground/70; */
+}
+
+.fc .fc-event-description {
+  @apply text-xs text-foreground/60;
+}
+
+/* Event colors by status */
+.fc .fc-event.status-confirmed {
+  @apply border-l-4 border-l-green-500;
+}
+
+.fc .fc-event.status-pending {
+  @apply border-l-4 border-l-yellow-500;
+}
+
+.fc .fc-event.status-completed {
+  @apply border-l-4 border-l-blue-500;
+}
+
+.fc .fc-event.status-cancelled {
+  @apply border-l-4 border-l-destructive opacity-50;
+}
+
+.fc .fc-event.status-no-show {
+  @apply bg-red-600 text-white;
+}
+
+/* Column Headers */
+.fc .fc-col-header-cell {
+  @apply border-2 bg-background py-3;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply text-sm font-medium text-muted-foreground;
+}
+
+.fc .fc-day-today .fc-col-header-cell-cushion {
+  @apply text-sm font-medium text-foreground;
+}
+
+.status-pending {
+  @apply border-l-4 border-l-yellow-500;
+}
+
+.status-confirmed {
+  @apply border-l-4 border-l-green-500;
+}
+
+.status-completed {
+  @apply border-l-4 border-l-blue-500;
+}
+
+.status-cancelled {
+  @apply border-l-4 border-l-destructive opacity-50;
+}
+
+/* Tooltip theme */
+.tippy-box[data-theme~='custom'] {
+  @apply bg-popover text-popover-foreground border border-border rounded-md shadow-md;
+}
+
+.tippy-box[data-theme~='custom'] .tippy-arrow {
+  @apply text-popover;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
