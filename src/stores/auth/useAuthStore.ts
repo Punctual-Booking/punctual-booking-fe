@@ -32,6 +32,7 @@ export const useAuthStore = create<AuthState>(set => ({
         id: '1',
         name: 'Admin User',
         email,
+        password,
         role: 'admin' as UserRole,
       }
       set({ isAuthenticated: true, user: mockUser })
