@@ -15,7 +15,10 @@
     },
     "saving": "Saving...",
     "confirmClose": "Discard changes?",
-    "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?"
+    "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?",
+    "backToServices": "Book Another Service",
+    "back": "Back",
+    "currency": "${{value}}"
   },
   "auth": {
     "login": "Login",
@@ -189,5 +192,54 @@
     "noEventsToDisplay": "No events to display",
     "allDay": "All day",
     "more": "more"
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "Choose from our range of professional services",
+    "duration": "{{duration}} minutes",
+    "select": "Select Service",
+    "price": "${price}",
+    "loading": "Loading services..."
+  },
+  "staff": {
+    "title": "Choose Your Stylist",
+    "description": "Select a stylist for your appointment",
+    "select": "Choose Stylist",
+    "availability": "Check Availability",
+    "experience": "{{years}} years experience",
+    "specialties": "Specialties",
+    "loading": "Loading staff members..."
+  },
+  "booking": {
+    "title": "Choose Date & Time",
+    "description": "Select your preferred appointment date and time",
+    "selectDate": "Select Date",
+    "selectTime": "Select Time",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "next": "Continue to Confirmation"
+  },
+  "confirmation": {
+    "title": "Confirm Your Booking",
+    "description": "Please review your booking details before confirming",
+    "bookingDetails": "Booking Details",
+    "confirm": "Confirm Booking",
+    "success": {
+      "title": "Booking Confirmed!",
+      "description": "Your appointment has been successfully booked",
+      "emailSent": "A confirmation email has been sent to your email address"
+    }
+  },
+  "customer": {
+    "dashboard": {
+      "title": "My Appointments",
+      "bookNew": "Book New Appointment",
+      "nextAppointment": "Next Appointment",
+      "upcomingAppointments": "Upcoming Appointments",
+      "pastAppointments": "Past Appointments",
+      "noUpcoming": "No upcoming appointments scheduled",
+      "noPast": "No past appointments",
+      "viewDetails": "View Details"
+    }
   }
 }

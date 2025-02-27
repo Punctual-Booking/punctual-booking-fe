@@ -15,7 +15,10 @@
     },
     "saving": "A guardar...",
     "confirmClose": "Descartar alterações?",
-    "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que quer fechar?"
+    "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que quer fechar?",
+    "backToServices": "Agendar Outro Serviço",
+    "back": "Voltar",
+    "currency": "€{{value}}"
   },
 
   "auth": {
@@ -192,5 +195,54 @@
     "noEventsToDisplay": "Sem eventos para mostrar",
     "allDay": "Todo o dia",
     "more": "mais"
+  },
+  "services": {
+    "title": "Os Nossos Serviços",
+    "description": "Escolha entre a nossa gama de serviços profissionais",
+    "duration": "{{duration}} minutos",
+    "select": "Selecionar Serviço",
+    "price": "€{{price}}",
+    "loading": "A carregar serviços..."
+  },
+  "staff": {
+    "title": "Escolha o Seu Estilista",
+    "description": "Selecione um estilista para o seu agendamento",
+    "select": "Escolher Estilista",
+    "availability": "Verificar Disponibilidade",
+    "experience": "{{years}} anos de experiência",
+    "specialties": "Especialidades",
+    "loading": "A carregar estilistas..."
+  },
+  "booking": {
+    "title": "Escolha Data e Hora",
+    "description": "Selecione a data e hora preferida para o seu agendamento",
+    "selectDate": "Selecionar Data",
+    "selectTime": "Selecionar Hora",
+    "available": "Disponível",
+    "unavailable": "Indisponível",
+    "next": "Continuar para Confirmação"
+  },
+  "confirmation": {
+    "title": "Confirmar Agendamento",
+    "description": "Por favor, reveja os detalhes do seu agendamento antes de confirmar",
+    "bookingDetails": "Detalhes do Agendamento",
+    "confirm": "Confirmar Agendamento",
+    "success": {
+      "title": "Agendamento Confirmado!",
+      "description": "O seu agendamento foi realizado com sucesso",
+      "emailSent": "Um email de confirmação foi enviado para o seu endereço de email"
+    }
+  },
+  "customer": {
+    "dashboard": {
+      "title": "Meus Agendamentos",
+      "bookNew": "Agendar Novo Serviço",
+      "nextAppointment": "Próximo Agendamento",
+      "upcomingAppointments": "Agendamentos Futuros",
+      "pastAppointments": "Agendamentos Anteriores",
+      "noUpcoming": "Não há agendamentos futuros",
+      "noPast": "Não há agendamentos anteriores",
+      "viewDetails": "Ver Detalhes"
+    }
   }
 }

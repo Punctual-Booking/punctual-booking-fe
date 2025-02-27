@@ -13,15 +13,15 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>(set => ({
-  isAuthenticated: true, // TODO: Remove this
+  isAuthenticated: false, // TODO: Remove this
   isLoading: false,
   error: null,
   user: {
     // TODO: Remove this
     id: '1',
-    name: 'Admin User',
-    email: 'admin@example.com',
-    role: 'admin' as UserRole,
+    name: 'Customer User',
+    email: 'customer@example.com',
+    role: UserRole.USER,
   },
   login: async (email, password) => {
     set({ isLoading: true, error: null })
@@ -30,10 +30,10 @@ export const useAuthStore = create<AuthState>(set => ({
       // TODO: Replace with actual API call
       const mockUser = {
         id: '1',
-        name: 'Admin User',
+        name: 'Customer User',
         email,
         password,
-        role: 'admin' as UserRole,
+        role: UserRole.USER,
       }
       set({ isAuthenticated: true, user: mockUser })
     } catch (error) {

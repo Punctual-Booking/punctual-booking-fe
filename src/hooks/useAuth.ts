@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { UserRole } from '@/types/auth'
 
 export const useAuth = () => {
-  const [role, setRole] = useState<UserRole | null>(null)
+  const [role, setRole] = useState<UserRole | null>(UserRole.USER)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -10,7 +10,7 @@ export const useAuth = () => {
     const fetchUserRole = async () => {
       try {
         await new Promise(resolve => setTimeout(resolve, 1000))
-        setRole('admin') // For testing
+        setRole(UserRole.USER) // For testing
       } catch (error) {
         console.error('Error fetching user role:', error)
         setRole(null)
