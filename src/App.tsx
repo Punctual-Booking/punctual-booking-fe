@@ -1,34 +1,108 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { AuthPage } from '@/pages/AuthPage'
+import { AdminLayout } from '@/layouts/AdminLayout'
+import { AdminDashboard } from '@/pages/admin/Dashboard'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { AuthGuard } from '@/components/auth/AuthGuard'
+import '@/styles/globals.css'
+import { useAuth } from '@/hooks/useAuth'
+import { ThemeProvider } from '@/providers/ThemeProvider'
+
+const ServicesPage = lazy(() => import('@/pages/admin/Services'))
+const CustomersPage = lazy(() => import('@/pages/admin/Customers'))
+const StaffPage = lazy(() => import('@/pages/admin/Staff'))
+const SettingsPage = lazy(() => import('@/pages/admin/Settings'))
+const BookingsPage = lazy(() => import('@/pages/admin/Bookings'))
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { role, isLoading } = useAuth()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <AuthGuard>
+                <AuthPage />
+              </AuthGuard>
+            }
+          />
+
+          {/* Admin Layout - Shared between admin and staff */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute
+                isAllowed={role === 'admin' || role === 'staff'}
+                redirectPath="/"
+              >
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route
+              path="customers"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <CustomersPage />
+                </Suspense>
+              }
+            />
+
+            {/* Admin-only routes */}
+            <Route
+              element={
+                <ProtectedRoute
+                  isAllowed={role === 'admin'}
+                  redirectPath="/admin"
+                />
+              }
+            >
+              <Route
+                path="services"
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ServicesPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="staff"
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <StaffPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <SettingsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="bookings"
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <BookingsPage />
+                  </Suspense>
+                }
+              />
+            </Route>
+          </Route>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   )
 }
 
