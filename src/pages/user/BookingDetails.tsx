@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import {
-  format,
-  addDays,
-  startOfDay,
-  addHours,
-  isBefore,
-  isAfter,
-} from 'date-fns'
+import { format, addDays, startOfDay, isBefore, isAfter } from 'date-fns'
 import {
   CalendarDays,
   Clock,
   Scissors,
-  MapPin,
   Phone,
   Mail,
   FileText,
@@ -21,15 +13,8 @@ import {
   ArrowLeft,
   Calendar,
   ChevronLeft,
-  ChevronRight,
 } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Loading } from '@/components/ui/loading'
