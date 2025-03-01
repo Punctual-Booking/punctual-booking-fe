@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/auth/useAuthStore'
+import { UserRole } from '@/types/auth'
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -8,17 +9,23 @@ interface AuthGuardProps {
 export const AuthGuard = ({ children }: AuthGuardProps) => {
   const { isAuthenticated, user } = useAuthStore()
 
-  if (isAuthenticated) {
-    switch (user?.role) {
-      case 'admin':
-      case 'staff':
-        return <Navigate to="/admin" replace />
-      case 'user':
-        return <Navigate to="/booking" replace />
-      default:
-        return <Navigate to="/" replace />
-    }
+  // Only redirect if authenticated
+  if (!isAuthenticated) {
+    return <>{children}</>
   }
 
-  return <>{children}</>
+  // Handle redirection based on role
+  let redirectPath = '/'
+
+  switch (user?.role) {
+    case UserRole.ADMIN:
+    case UserRole.STAFF:
+      redirectPath = '/admin'
+      break
+    case UserRole.USER:
+      redirectPath = '/user/dashboard'
+      break
+  }
+
+  return <Navigate to={redirectPath} replace />
 }

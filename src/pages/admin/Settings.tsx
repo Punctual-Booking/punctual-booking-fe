@@ -15,7 +15,7 @@ export const SettingsPage = () => {
       </h1>
 
       <Tabs defaultValue="business" className="space-y-4">
-        <div className="overflow-auto sm:overflow-visible">
+        <div className="overflow-auto">
           <TabsList>
             <TabsTrigger value="business">
               {t('admin.settings.business.title')}

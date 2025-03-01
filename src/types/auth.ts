@@ -1,4 +1,8 @@
-export type UserRole = 'admin' | 'staff' | 'user'
+export enum UserRole {
+  ADMIN = 'admin',
+  STAFF = 'staff',
+  USER = 'user',
+}
 
 export interface User {
   id: string
