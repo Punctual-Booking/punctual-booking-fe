@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { forwardRef, useEffect } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -48,6 +48,16 @@ export const FullCalendarComponent = forwardRef<
     },
     ref
   ) => {
+    // Update the calendar view when the view prop changes
+    useEffect(() => {
+      if (ref && 'current' in ref && ref.current) {
+        const calendarApi = ref.current.getApi()
+        if (calendarApi.view.type !== view) {
+          calendarApi.changeView(view)
+        }
+      }
+    }, [view, ref])
+
     return (
       <FullCalendar
         ref={ref}

@@ -183,7 +183,7 @@ export const StaffCalendarPage = () => {
 
   // Format date for display
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('pt-PT', {
+    return new Intl.DateTimeFormat(i18n.language === 'pt' ? 'pt-PT' : 'en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -314,6 +314,11 @@ export const StaffCalendarPage = () => {
                     meridiem: false,
                     hour12: false,
                   }}
+                  // Month view specific settings
+                  dayMaxEventRows={3}
+                  dayMaxEvents={3}
+                  moreLinkClick="popover"
+                  moreLinkClassNames="text-xs font-medium text-primary hover:text-primary-dark"
                   eventContent={(info: any) => {
                     // Extract the title which contains both service and customer name
                     const title = info.event.title
@@ -328,6 +333,62 @@ export const StaffCalendarPage = () => {
                     // Get color for this staff member
                     const colorClass = getStaffColor(staffId)
 
+                    // Check if we're in month view
+                    const isMonthView = info.view.type === 'dayGridMonth'
+
+                    // Render a more compact version for month view
+                    if (isMonthView) {
+                      return (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              className={`h-full w-full rounded border py-0 px-1 text-xs overflow-hidden ${colorClass}`}
+                              style={{ fontSize: '0.65rem' }}
+                            >
+                              <div className="truncate font-medium">
+                                {customerName}
+                              </div>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="right"
+                            align="start"
+                            className="p-2 space-y-1"
+                          >
+                            <p className="font-medium">{customerName}</p>
+                            <div className="mt-2">
+                              <p className="text-xs font-medium">
+                                {serviceName}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {staff?.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(info.event.start).toLocaleTimeString(
+                                  i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                                  {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false,
+                                  }
+                                )}{' '}
+                                -{' '}
+                                {new Date(info.event.end).toLocaleTimeString(
+                                  i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                                  {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false,
+                                  }
+                                )}
+                              </p>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      )
+                    }
+
+                    // Regular view for day and week views
                     return (
                       <Tooltip>
                         <TooltipTrigger asChild>

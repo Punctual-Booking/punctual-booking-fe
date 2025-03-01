@@ -58,7 +58,7 @@ export const StaffModal = ({ open, onClose, staff }: StaffModalProps) => {
     register,
     handleSubmit,
     reset,
-    setValue,
+    // setValue,
     control,
     formState: { errors, isDirty },
   } = useForm<StaffFormData>({

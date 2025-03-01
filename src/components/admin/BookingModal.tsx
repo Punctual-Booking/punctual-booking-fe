@@ -14,13 +14,12 @@ import {
   SelectContent,
   SelectTrigger,
   SelectValue,
-  SelectItem,
 } from '@/components/ui/select'
 import { useEffect, useState } from 'react'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Booking } from '@/types/booking'
 import { TimePicker } from '@/components/ui/time-picker'
-import { format, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
@@ -69,7 +68,7 @@ export const BookingModal = ({
 
   const schema = createBookingSchema(t)
   const {
-    register,
+    // register,
     handleSubmit,
     reset,
     control,

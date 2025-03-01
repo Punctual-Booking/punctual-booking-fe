@@ -29,6 +29,7 @@ export const StaffPage = () => {
   )
 
   // Mock data with additional fields
+  // @ts-ignore
   const [staffMembers, setStaffMembers] = useState<StaffMemberWithUI[]>([
     {
       id: '1',

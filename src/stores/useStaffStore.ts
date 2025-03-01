@@ -19,6 +19,7 @@ const dummyStaff: StaffMember[] = [
     specialties: ['Hair Coloring', 'Hair Treatment', 'Styling'],
     yearsOfExperience: 8,
     isActive: true,
+    services: [],
   },
   {
     id: '2',
@@ -29,6 +30,7 @@ const dummyStaff: StaffMember[] = [
     specialties: ['Haircut', 'Beard Trim', "Men's Styling"],
     yearsOfExperience: 5,
     isActive: true,
+    services: [],
   },
   {
     id: '3',
@@ -39,6 +41,7 @@ const dummyStaff: StaffMember[] = [
     specialties: ['Hair Coloring', 'Haircut', 'Wedding Styling'],
     yearsOfExperience: 10,
     isActive: true,
+    services: [],
   },
 ]
 
