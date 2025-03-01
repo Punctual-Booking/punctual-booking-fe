@@ -5,9 +5,21 @@
   },
   "common": {
     "loading": "Loading...",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
+    "search": "Search",
     "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "backToDashboard": "Back to Dashboard",
+    "minutes": "minutes",
+    "required": "Required",
+    "optional": "Optional",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
     "theme": {
       "light": "Light",
       "dark": "Dark",
@@ -17,7 +29,6 @@
     "confirmClose": "Discard changes?",
     "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?",
     "backToServices": "Book Another Service",
-    "back": "Back",
     "currency": "${{value}}",
     "settingsSaved": "Settings saved successfully",
     "settingsError": "Error saving settings"
@@ -257,7 +268,46 @@
     "selectTime": "Select Time",
     "available": "Available",
     "unavailable": "Unavailable",
-    "next": "Continue to Confirmation"
+    "next": "Continue to Confirmation",
+    "backToDate": "Back to Date Selection",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShow": "No Show"
+    },
+    "details": {
+      "title": "Booking Details",
+      "status": "Booking Status",
+      "bookingId": "Booking ID",
+      "created": "Created on",
+      "serviceDetails": "Service Details",
+      "dateAndTime": "Date & Time",
+      "staffDetails": "Staff Details",
+      "notes": "Notes",
+      "actions": "Actions"
+    },
+    "actions": {
+      "reschedule": "Reschedule",
+      "cancel": "Cancel Booking"
+    },
+    "cancel": {
+      "title": "Cancel Booking",
+      "description": "Are you sure you want to cancel this booking? This action cannot be undone.",
+      "confirm": "Yes, Cancel Booking"
+    },
+    "reschedule": {
+      "title": "Reschedule Booking",
+      "description": "Please select a new date and time for your booking.",
+      "summary": "New Appointment Summary",
+      "confirm": "Confirm Reschedule",
+      "success": "Your booking has been successfully rescheduled."
+    },
+    "notFound": {
+      "title": "Booking Not Found",
+      "description": "The booking you're looking for doesn't exist or you don't have permission to view it."
+    }
   },
   "confirmation": {
     "title": "Confirm Your Booking",
