@@ -21,7 +21,7 @@ export const useAuthStore = create<AuthState>(set => ({
     id: '1',
     name: 'Customer User',
     email: 'customer@example.com',
-    role: UserRole.ADMIN,
+    role: UserRole.USER,
   },
   login: async (email, password) => {
     set({ isLoading: true, error: null })
@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthState>(set => ({
         name: 'Customer User',
         email,
         password,
-        role: UserRole.ADMIN,
+        role: UserRole.USER,
       }
       set({ isAuthenticated: true, user: mockUser })
     } catch (error) {

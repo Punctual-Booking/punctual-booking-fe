@@ -27,6 +27,7 @@ const BookingPage = lazy(() => import('@/pages/user/Booking'))
 const ConfirmationPage = lazy(() => import('@/pages/user/Confirmation'))
 const BookingSuccessPage = lazy(() => import('@/pages/user/BookingSuccess'))
 const CustomerDashboard = lazy(() => import('@/pages/user/CustomerDashboard'))
+const BookingDetails = lazy(() => import('@/pages/user/BookingDetails'))
 
 function App() {
   const { role, isLoading } = useAuth()
@@ -180,6 +181,28 @@ function App() {
               element={
                 <Suspense fallback={<Loading centered />}>
                   <BookingSuccessPage />
+                </Suspense>
+              }
+            />
+          </Route>
+
+          {/* Booking details route */}
+          <Route
+            path="/booking-details/:id"
+            element={
+              <ProtectedRoute
+                isAllowed={role === UserRole.USER}
+                redirectPath="/"
+              >
+                <CustomerLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route
+              index
+              element={
+                <Suspense fallback={<Loading centered />}>
+                  <BookingDetails />
                 </Suspense>
               }
             />
