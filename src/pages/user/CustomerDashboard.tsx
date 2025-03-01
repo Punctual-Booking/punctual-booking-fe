@@ -7,6 +7,7 @@ import { useBookingStore } from '@/stores/useBookingStore'
 import { useAuthStore } from '@/stores/auth/useAuthStore'
 import { CalendarDays, Clock, Scissors, ChevronRight } from 'lucide-react'
 import { format } from 'date-fns'
+import { Loading } from '@/components/ui/loading'
 
 const CustomerDashboard = () => {
   const { t } = useTranslation()
@@ -33,7 +34,7 @@ const CustomerDashboard = () => {
   }
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading...</div>
+    return <Loading centered className="py-8" />
   }
 
   return (

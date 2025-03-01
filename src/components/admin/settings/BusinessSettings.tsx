@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { TimePicker } from '@/components/ui/time-picker'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { toast } from 'sonner'
+import { Loading } from '@/components/ui/loading'
 
 export const BusinessSettings = () => {
   const { t } = useTranslation()
@@ -97,7 +98,15 @@ export const BusinessSettings = () => {
         </div>
 
         <Button onClick={handleSave} disabled={isLoading}>
-          {isLoading ? t('common.saving') : t('common.save')}
+          {isLoading ? (
+            <Loading
+              size="sm"
+              text={t('common.saving')}
+              className="justify-center"
+            />
+          ) : (
+            t('common.save')
+          )}
         </Button>
       </CardContent>
     </Card>

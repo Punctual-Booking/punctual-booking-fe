@@ -7,6 +7,7 @@ import { useStaffStore } from '@/stores/useStaffStore'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { Badge } from '@/components/ui/badge'
 import { StaffMember } from '@/types/staff'
+import { Loading } from '@/components/ui/loading'
 
 export const StaffSelectionPage = () => {
   const { t } = useTranslation()
@@ -29,7 +30,7 @@ export const StaffSelectionPage = () => {
   }
 
   if (isLoading) {
-    return <div>{t('staff.loading')}</div>
+    return <Loading centered className="py-8" text={t('staff.loading')} />
   }
 
   return (

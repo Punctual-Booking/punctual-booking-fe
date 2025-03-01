@@ -10,7 +10,7 @@ export const useAuth = () => {
     const fetchUserRole = async () => {
       try {
         await new Promise(resolve => setTimeout(resolve, 1000))
-        setRole(UserRole.USER) // For testing
+        setRole(UserRole.ADMIN) // For testing
       } catch (error) {
         console.error('Error fetching user role:', error)
         setRole(null)

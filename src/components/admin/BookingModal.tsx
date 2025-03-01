@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -14,18 +14,37 @@ import {
   SelectContent,
   SelectTrigger,
   SelectValue,
+  SelectItem,
 } from '@/components/ui/select'
 import { useEffect, useState } from 'react'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { Booking } from '@/types/booking'
 import { TimePicker } from '@/components/ui/time-picker'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   createBookingSchema,
   type BookingFormData,
 } from '@/utils/bookings/validation'
+import { Loading } from '@/components/ui/loading'
+
+// Helper function to safely extract time from date string
+const extractTimeFromDateString = (dateString?: string): string => {
+  if (!dateString) return ''
+
+  try {
+    // Try to parse the date
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return '' // Invalid date
+
+    // Return formatted time
+    return format(date, 'HH:mm')
+  } catch (e) {
+    console.error('Error formatting date:', e)
+    return ''
+  }
+}
 
 interface BookingModalProps {
   open: boolean
@@ -53,9 +72,20 @@ export const BookingModal = ({
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isDirty },
   } = useForm<BookingFormData>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      startTime:
+        extractTimeFromDateString(booking?.startTime) ||
+        extractTimeFromDateString(defaultStartTime) ||
+        '',
+      endTime:
+        extractTimeFromDateString(booking?.endTime) ||
+        extractTimeFromDateString(defaultEndTime) ||
+        '',
+    },
   })
 
   useEffect(() => {
@@ -64,14 +94,14 @@ export const BookingModal = ({
         customerId: booking.customer.id,
         serviceId: booking.service.id,
         staffId: booking.staff.id,
-        startTime: booking.startTime,
-        endTime: booking.endTime,
+        startTime: extractTimeFromDateString(booking.startTime),
+        endTime: extractTimeFromDateString(booking.endTime),
         notes: booking.notes,
       })
-    } else if (defaultDate && defaultStartTime && defaultEndTime) {
+    } else if (defaultStartTime || defaultEndTime) {
       reset({
-        startTime: defaultStartTime,
-        endTime: defaultEndTime,
+        startTime: extractTimeFromDateString(defaultStartTime),
+        endTime: extractTimeFromDateString(defaultEndTime),
       })
     }
   }, [booking, defaultDate, defaultStartTime, defaultEndTime, reset])
@@ -106,7 +136,7 @@ export const BookingModal = ({
             <DialogTitle>
               {booking
                 ? t('admin.bookings.editBooking')
-                : t('admin.bookings.newBooking')}
+                : t('admin.bookings.newBooking.desktop')}
             </DialogTitle>
           </DialogHeader>
           {error && (
@@ -117,19 +147,26 @@ export const BookingModal = ({
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <Label>{t('admin.bookings.customer')}</Label>
-              <Select
+              <Controller
+                name="customerId"
+                control={control}
                 defaultValue={booking?.customer.id}
-                {...register('customerId')}
-              >
-                <SelectTrigger>
-                  <SelectValue
-                    placeholder={t('admin.bookings.selectCustomer')}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {/* TODO: Add customers from API */}
-                </SelectContent>
-              </Select>
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('admin.bookings.selectCustomer')}
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {/* TODO: Add customers from API */}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.customerId && (
                 <p className="text-sm text-destructive">
                   {errors.customerId.message}
@@ -139,19 +176,26 @@ export const BookingModal = ({
 
             <div className="space-y-2">
               <Label>{t('admin.bookings.service')}</Label>
-              <Select
+              <Controller
+                name="serviceId"
+                control={control}
                 defaultValue={booking?.service.id}
-                {...register('serviceId')}
-              >
-                <SelectTrigger>
-                  <SelectValue
-                    placeholder={t('admin.bookings.selectService')}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {/* TODO: Add services from API */}
-                </SelectContent>
-              </Select>
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('admin.bookings.selectService')}
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {/* TODO: Add services from API */}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.serviceId && (
                 <p className="text-sm text-destructive">
                   {errors.serviceId.message}
@@ -161,12 +205,26 @@ export const BookingModal = ({
 
             <div className="space-y-2">
               <Label>{t('admin.bookings.staff')}</Label>
-              <Select defaultValue={booking?.staff.id} {...register('staffId')}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t('admin.bookings.selectStaff')} />
-                </SelectTrigger>
-                <SelectContent>{/* TODO: Add staff from API */}</SelectContent>
-              </Select>
+              <Controller
+                name="staffId"
+                control={control}
+                defaultValue={booking?.staff.id}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('admin.bookings.selectStaff')}
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {/* TODO: Add staff from API */}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.staffId && (
                 <p className="text-sm text-destructive">
                   {errors.staffId.message}
@@ -177,31 +235,41 @@ export const BookingModal = ({
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>{t('admin.bookings.startTime')}</Label>
-                <TimePicker
-                  value={format(
-                    new Date(
-                      booking?.startTime || defaultStartTime || Date.now()
-                    ),
-                    'HH:mm'
+                <Controller
+                  name="startTime"
+                  control={control}
+                  render={({ field }) => (
+                    <TimePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      name={field.name}
+                    />
                   )}
-                  onChange={value => {
-                    register('startTime').onChange({ target: { value } })
-                  }}
-                  name={register('startTime').name}
                 />
+                {errors.startTime && (
+                  <p className="text-sm text-destructive">
+                    {errors.startTime.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>{t('admin.bookings.endTime')}</Label>
-                <TimePicker
-                  value={format(
-                    new Date(booking?.endTime || defaultEndTime || Date.now()),
-                    'HH:mm'
+                <Controller
+                  name="endTime"
+                  control={control}
+                  render={({ field }) => (
+                    <TimePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      name={field.name}
+                    />
                   )}
-                  onChange={value => {
-                    register('endTime').onChange({ target: { value } })
-                  }}
-                  name={register('endTime').name}
                 />
+                {errors.endTime && (
+                  <p className="text-sm text-destructive">
+                    {errors.endTime.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -214,7 +282,15 @@ export const BookingModal = ({
                 {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? t('common.saving') : t('common.save')}
+                {isLoading ? (
+                  <Loading
+                    size="sm"
+                    text={t('common.saving')}
+                    className="justify-center"
+                  />
+                ) : (
+                  t('common.save')
+                )}
               </Button>
             </div>
           </form>

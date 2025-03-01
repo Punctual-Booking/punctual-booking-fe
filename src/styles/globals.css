@@ -263,3 +263,74 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Mobile responsive styles for FullCalendar */
+@media (max-width: 768px) {
+  .fc .fc-toolbar {
+    @apply items-start gap-2 px-2 py-2;
+  }
+
+  .fc .fc-toolbar-title {
+    @apply text-base;
+  }
+
+  .fc .fc-button {
+    @apply px-2 py-1 text-xs;
+  }
+
+  .fc .fc-timegrid-slot {
+    @apply h-10;
+  }
+
+  .fc .fc-timegrid-axis-frame {
+    @apply h-[40px];
+  }
+
+  .fc .fc-col-header-cell-cushion {
+    @apply text-xs;
+  }
+
+  .fc .fc-timegrid-axis-cushion,
+  .fc .fc-timegrid-slot-label-cushion {
+    @apply text-[10px];
+  }
+
+  .fc .fc-event-main {
+    @apply p-1;
+  }
+
+  .fc .fc-event-title {
+    @apply text-xs;
+  }
+
+  .fc .fc-event-description {
+    @apply text-[10px];
+  }
+
+  /* Improve event display on mobile */
+  .fc .fc-event {
+    @apply min-h-[30px];
+  }
+
+  /* Adjust tooltip position for mobile */
+  .tippy-box[data-placement^='right'] {
+    @apply ml-1;
+  }
+
+  /* Make the day view more compact */
+  .fc .fc-timegrid-col-frame {
+    @apply px-1;
+  }
+
+  /* Adjust button group spacing */
+  .fc .fc-button-group .fc-button {
+    @apply px-1;
+  }
+
+  /* Hide some elements on very small screens */
+  @media (max-width: 360px) {
+    .fc .fc-toolbar-chunk:last-child {
+      @apply mt-2;
+    }
+  }
+}

@@ -8,6 +8,7 @@ import {
   type LoginFormData,
 } from '@/utils/authentication/utils'
 import { useAuthStore } from '@/stores/auth/useAuthStore'
+import { Loading } from '@/components/ui/loading'
 
 export const LoginForm = () => {
   const { t } = useTranslation()
@@ -45,7 +46,11 @@ export const LoginForm = () => {
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? 'Loading...' : t('auth.login')}
+        {isLoading ? (
+          <Loading size="sm" text="" className="justify-center" />
+        ) : (
+          t('auth.login')
+        )}
       </Button>
     </form>
   )

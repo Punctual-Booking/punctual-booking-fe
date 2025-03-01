@@ -6,6 +6,7 @@ import { useServiceStore } from '@/stores/useServiceStore'
 import { Service } from '@/types/service'
 import { useEffect } from 'react'
 import { useBookingStore } from '@/stores/useBookingStore'
+import { Loading } from '@/components/ui/loading'
 
 export const ServicesPage = () => {
   const { t } = useTranslation()
@@ -23,7 +24,7 @@ export const ServicesPage = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading centered className="py-8" text={t('services.loading')} />
   }
 
   return (

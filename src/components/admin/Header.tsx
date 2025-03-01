@@ -19,7 +19,7 @@ export const Header = ({ children }: HeaderProps) => {
         <div className="flex flex-1 items-center gap-2">
           {children}
           <span className="text-sm font-medium mr-2">{businessName}</span>
-          <span className="text-sm text-muted-foreground">
+          <span className="hidden md:inline text-sm text-muted-foreground">
             {t('admin.welcome', { name: user?.name })}
           </span>
         </div>

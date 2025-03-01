@@ -5,6 +5,7 @@ export interface StaffMember {
   phone: string
   image?: string
   specialties: string[]
+  services: string[]
   yearsOfExperience: number
   isActive: boolean
 }
@@ -16,6 +17,7 @@ export interface StaffMemberPartial {
   phone?: string
   image?: string
   specialties?: string[]
+  services?: string[]
   yearsOfExperience?: number
   isActive?: boolean
 }

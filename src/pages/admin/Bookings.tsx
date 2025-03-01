@@ -11,7 +11,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Booking } from '@/types/booking'
 import { BookingModal } from '@/components/admin/BookingModal'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Loader2, Plus, Info } from 'lucide-react'
+import { Plus, Info, ChevronLeft, ChevronRight } from 'lucide-react'
 import { EventInput } from '@fullcalendar/core'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,6 +20,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Loading } from '@/components/ui/loading'
+import { useCalendarNavigation } from '@/hooks/useCalendarNavigation'
 
 export const BookingsPage = () => {
   const { t, i18n } = useTranslation()
@@ -31,6 +33,16 @@ export const BookingsPage = () => {
     startTime?: string
     endTime?: string
   }>({})
+
+  const {
+    calendarRef,
+    isMobileView,
+    getInitialView,
+    getHeaderToolbar,
+    navigateWeekForward,
+    navigateWeekBackward,
+    handleWindowResize,
+  } = useCalendarNavigation()
 
   const currentLocale = i18n.language === 'pt' ? ptLocale : enLocale
 
@@ -100,25 +112,71 @@ export const BookingsPage = () => {
             }}
           >
             <Plus className="mr-2 h-4 w-4" />
-            {t('admin.bookings.newBooking')}
+            <span className="hidden sm:inline">
+              {t('admin.bookings.newBooking.desktop')}
+            </span>
+            <span className="sm:hidden">
+              {t('admin.bookings.newBooking.mobile')}
+            </span>
           </Button>
         </div>
 
+        {/* Week navigation buttons for mobile */}
+        {isMobileView && (
+          <div className="flex justify-center gap-4 mb-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={navigateWeekBackward}
+              className="flex items-center gap-1"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span>{t('admin.bookings.previousWeek')}</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={navigateWeekForward}
+              className="flex items-center gap-1"
+            >
+              <span>{t('admin.bookings.nextWeek')}</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
         <Card className="p-4">
           {isLoading ? (
-            <div className="flex items-center justify-center p-8">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <div className="p-8">
+              <Loading centered size="lg" />
             </div>
           ) : (
             <div className="h-[600px] flex flex-col">
               <FullCalendar
+                ref={calendarRef}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView="timeGridWeek"
+                initialView={getInitialView()}
                 locale={currentLocale}
-                headerToolbar={{
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                headerToolbar={getHeaderToolbar()}
+                views={{
+                  timeGridDay: {
+                    titleFormat: {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    },
+                  },
+                  timeGridWeek: {
+                    titleFormat: { month: 'short', day: 'numeric' },
+                    dayHeaderFormat: {
+                      weekday: 'short',
+                      day: 'numeric',
+                      omitCommas: true,
+                    },
+                  },
+                  dayGridMonth: {
+                    titleFormat: { year: 'numeric', month: 'long' },
+                  },
                 }}
                 dayHeaderFormat={{
                   weekday: 'long',
@@ -147,6 +205,7 @@ export const BookingsPage = () => {
                 editable={false}
                 eventClick={handleEventClick}
                 select={handleSelect}
+                windowResize={handleWindowResize}
                 eventContent={info => {
                   const booking = info.event.extendedProps.booking
                   return (
