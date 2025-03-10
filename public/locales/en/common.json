@@ -5,9 +5,21 @@
   },
   "common": {
     "loading": "Loading...",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
+    "search": "Search",
     "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "backToDashboard": "Back to Dashboard",
+    "minutes": "minutes",
+    "required": "Required",
+    "optional": "Optional",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
     "theme": {
       "light": "Light",
       "dark": "Dark",
@@ -15,7 +27,11 @@
     },
     "saving": "Saving...",
     "confirmClose": "Discard changes?",
-    "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?"
+    "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?",
+    "backToServices": "Book Another Service",
+    "currency": "${{value}}",
+    "settingsSaved": "Settings saved successfully",
+    "settingsError": "Error saving settings"
   },
   "auth": {
     "login": "Login",
@@ -51,6 +67,7 @@
       "dashboard": "Dashboard",
       "bookings": "Bookings",
       "staff": "Staff",
+      "staffCalendar": "Staff Calendar",
       "customers": "Customers",
       "settings": "Settings",
       "services": "Services"
@@ -93,30 +110,45 @@
       "status_inactive": "Inactive"
     },
     "staff": {
-      "title": "Staff Members",
+      "title": "Staff Management",
       "addStaff": "Add Staff",
       "name": "Name",
       "email": "Email",
       "role": "Role",
+      "phone": "Phone",
+      "specialties": "Specialties",
+      "services": "Services",
+      "experience": "Experience",
+      "years": "years",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "isActive": "Active Status",
       "actions": "Actions",
+      "namePlaceholder": "Enter name",
+      "emailPlaceholder": "Enter email",
+      "phonePlaceholder": "Enter phone number",
+      "specialtiesPlaceholder": "Enter specialties (e.g. Hair, Makeup, Nails)",
+      "servicesPlaceholder": "Enter services (e.g. Haircut, Styling, Manicure)",
+      "separateWithCommas": "Separate multiple items with commas",
       "selectRole": "Select a role",
       "roles": {
         "admin": "Administrator",
         "staff": "Staff Member"
       },
-      "modal": {
-        "addTitle": "Add Staff Member",
-        "editTitle": "Edit Staff Member",
-        "description": "Add or modify staff member details.",
-        "save": "Save",
-        "cancel": "Cancel",
-        "confirmClose": "Discard changes?",
-        "confirmCloseDescription": "You have unsaved changes. Are you sure you want to close?"
-      },
       "validation": {
         "nameRequired": "Name is required",
         "emailRequired": "Email is required",
         "emailInvalid": "Please enter a valid email"
+      },
+      "modal": {
+        "addTitle": "Add Staff Member",
+        "editTitle": "Edit Staff Member",
+        "description": "Add a new staff member or edit an existing one.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "confirmClose": "Discard changes?",
+        "confirmCloseDescription": "You have unsaved changes. Are you sure you want to discard them?"
       }
     },
     "settings": {
@@ -127,7 +159,10 @@
         "name": "Business Name",
         "description": "Description",
         "openingTime": "Opening Time",
-        "closingTime": "Closing Time"
+        "closingTime": "Closing Time",
+        "email": "Business Email",
+        "phone": "Business Phone",
+        "address": "Business Address"
       },
       "booking": {
         "title": "Booking Settings",
@@ -161,7 +196,10 @@
     },
     "bookings": {
       "title": "Bookings",
-      "newBooking": "New Booking",
+      "newBooking": {
+        "desktop": "New Booking",
+        "mobile": "New"
+      },
       "editBooking": "Edit Booking",
       "customer": "Customer",
       "selectCustomer": "Select a customer",
@@ -172,11 +210,27 @@
       "startTime": "Start Time",
       "endTime": "End Time",
       "notes": "Notes",
+      "previousWeek": "Previous Week",
+      "nextWeek": "Next Week",
       "validation": {
         "customerRequired": "Customer is required",
         "serviceRequired": "Service is required",
         "staffRequired": "Staff member is required"
       }
+    },
+    "staffCalendar": {
+      "title": "Staff Calendar",
+      "viewAll": "View All Staff",
+      "clearSelection": "Clear Selection",
+      "selectStaff": "Select Staff Members",
+      "services": "services",
+      "noBookings": "No bookings to display",
+      "filterByStaff": "Filter by Staff",
+      "bookingDetails": "Booking Details",
+      "customer": "Customer",
+      "service": "Service",
+      "time": "Time",
+      "duration": "Duration"
     }
   },
   "calendar": {
@@ -189,5 +243,93 @@
     "noEventsToDisplay": "No events to display",
     "allDay": "All day",
     "more": "more"
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "Choose from our range of professional services",
+    "duration": "{{duration}} minutes",
+    "select": "Select Service",
+    "price": "${price}",
+    "loading": "Loading services..."
+  },
+  "staff": {
+    "title": "Choose Your Stylist",
+    "description": "Select a stylist for your appointment",
+    "select": "Choose Stylist",
+    "availability": "Check Availability",
+    "experience": "{{years}} years experience",
+    "specialties": "Specialties",
+    "loading": "Loading staff members..."
+  },
+  "booking": {
+    "title": "Choose Date & Time",
+    "description": "Select your preferred appointment date and time",
+    "selectDate": "Select Date",
+    "selectTime": "Select Time",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "next": "Continue to Confirmation",
+    "backToDate": "Back to Date Selection",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShow": "No Show"
+    },
+    "details": {
+      "title": "Booking Details",
+      "status": "Booking Status",
+      "bookingId": "Booking ID",
+      "created": "Created on",
+      "serviceDetails": "Service Details",
+      "dateAndTime": "Date & Time",
+      "staffDetails": "Staff Details",
+      "notes": "Notes",
+      "actions": "Actions"
+    },
+    "actions": {
+      "reschedule": "Reschedule",
+      "cancel": "Cancel Booking"
+    },
+    "cancel": {
+      "title": "Cancel Booking",
+      "description": "Are you sure you want to cancel this booking? This action cannot be undone.",
+      "confirm": "Yes, Cancel Booking"
+    },
+    "reschedule": {
+      "title": "Reschedule Booking",
+      "description": "Please select a new date and time for your booking.",
+      "summary": "New Appointment Summary",
+      "confirm": "Confirm Reschedule",
+      "success": "Your booking has been successfully rescheduled."
+    },
+    "notFound": {
+      "title": "Booking Not Found",
+      "description": "The booking you're looking for doesn't exist or you don't have permission to view it."
+    }
+  },
+  "confirmation": {
+    "title": "Confirm Your Booking",
+    "description": "Please review your booking details before confirming",
+    "bookingDetails": "Booking Details",
+    "confirm": "Confirm Booking",
+    "success": {
+      "title": "Booking Confirmed!",
+      "description": "Your appointment has been successfully booked",
+      "emailSent": "A confirmation email has been sent to your email address"
+    }
+  },
+  "customer": {
+    "dashboard": {
+      "title": "My Appointments",
+      "bookNew": "Book New Appointment",
+      "nextAppointment": "Next Appointment",
+      "upcomingAppointments": "Upcoming Appointments",
+      "pastAppointments": "Past Appointments",
+      "noUpcoming": "No upcoming appointments scheduled",
+      "noPast": "No past appointments",
+      "viewDetails": "View Details"
+    }
   }
 }

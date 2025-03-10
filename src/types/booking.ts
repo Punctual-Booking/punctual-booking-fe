@@ -1,12 +1,12 @@
-import { Customer } from '@/types/customer'
-import { Service } from '@/types/service'
-import { StaffMember } from '@/types/staff'
+import { CustomerPartial } from '@/types/customer'
+import { ServicePartial } from '@/types/service'
+import { StaffMemberPartial } from '@/types/staff'
 
 export interface Booking {
   id: string
-  customer: Customer
-  service: Service
-  staff: StaffMember
+  customer: CustomerPartial
+  service: ServicePartial
+  staff: StaffMemberPartial
   startTime: string
   endTime: string
   status: BookingStatus
@@ -15,12 +15,13 @@ export interface Booking {
   updatedAt: string
 }
 
-export type BookingStatus =
-  | 'pending' // Awaiting confirmation
-  | 'confirmed' // Booking is confirmed
-  | 'completed' // Service has been provided
-  | 'cancelled' // Booking was cancelled
-  | 'no-show' // Customer didn't show up
+export enum BookingStatus {
+  PENDING = 'pending', // Awaiting confirmation
+  CONFIRMED = 'confirmed', // Booking is confirmed
+  COMPLETED = 'completed', // Service has been provided
+  CANCELLED = 'cancelled', // Booking was cancelled
+  NO_SHOW = 'no-show', // Customer didn't show up
+}
 
 export interface BookingFormData {
   customerId: string

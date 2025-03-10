@@ -61,7 +61,7 @@ export const ServicesPage = () => {
               <TableHead>{t('admin.services.name')}</TableHead>
               <TableHead>{t('admin.services.description')}</TableHead>
               <TableHead>{t('admin.services.price')}</TableHead>
-              <TableHead className="w-[100px]">
+              <TableHead className="w-[100px] text-center">
                 {t('admin.services.actions')}
               </TableHead>
             </TableRow>

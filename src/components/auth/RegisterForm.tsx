@@ -8,6 +8,7 @@ import {
   type RegisterFormData,
 } from '@/utils/authentication/utils'
 import { useAuthStore } from '@/stores/auth/useAuthStore'
+import { Loading } from '@/components/ui/loading'
 
 export const RegisterForm = () => {
   const { t } = useTranslation()
@@ -53,7 +54,11 @@ export const RegisterForm = () => {
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? 'Loading...' : t('auth.register')}
+        {isLoading ? (
+          <Loading size="sm" text="" className="justify-center" />
+        ) : (
+          t('auth.register')
+        )}
       </Button>
     </form>
   )

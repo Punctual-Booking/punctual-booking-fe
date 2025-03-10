@@ -1,13 +1,25 @@
 {
   "app": {
     "name": "Punctual",
-    "description": "Faça a gestão das suas marcações com facilidade."
+    "description": "Gerencie os seus agendamentos com facilidade."
   },
   "common": {
     "loading": "A carregar...",
-    "cancel": "Cancelar",
-    "confirm": "Confirmar",
+    "search": "Pesquisar",
     "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "back": "Voltar",
+    "backToDashboard": "Voltar ao Painel",
+    "minutes": "minutos",
+    "required": "Obrigatório",
+    "optional": "Opcional",
+    "error": "Erro",
+    "success": "Sucesso",
+    "warning": "Aviso",
+    "info": "Informação",
     "theme": {
       "light": "Claro",
       "dark": "Escuro",
@@ -15,11 +27,15 @@
     },
     "saving": "A guardar...",
     "confirmClose": "Descartar alterações?",
-    "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que quer fechar?"
+    "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que deseja fechar?",
+    "backToServices": "Agendar Outro Serviço",
+    "currency": "{{value}}€",
+    "settingsSaved": "Definições guardadas com sucesso",
+    "settingsError": "Erro ao guardar definições"
   },
 
   "auth": {
-    "login": "Entrar",
+    "login": "Iniciar Sessão",
     "register": "Registar",
     "email": "Email",
     "password": "Palavra-passe",
@@ -28,22 +44,22 @@
     "emailPlaceholder": "Introduza o seu email",
     "passwordPlaceholder": "Introduza a sua palavra-passe",
     "namePlaceholder": "Introduza o seu nome",
-    "logout": "Sair"
+    "logout": "Terminar Sessão"
   },
   "validation": {
     "required": "Este campo é obrigatório",
     "email": "Endereço de email inválido",
     "password": {
       "min": "A palavra-passe deve ter pelo menos {{min}} caracteres",
-      "requirements": "A palavra-passe deve conter pelo menos uma letra maiúscula, uma minúscula e um número"
+      "requirements": "A palavra-passe deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número"
     },
     "name": {
       "min": "O nome deve ter pelo menos {{min}} caracteres"
     },
     "service": {
-      "name": "Nome é obrigatório",
-      "description": "Descrição é obrigatória",
-      "price": "Preço é obrigatório",
+      "name": "O nome é obrigatório",
+      "description": "A descrição é obrigatória",
+      "price": "O preço é obrigatório",
       "image": "Por favor, carregue um ficheiro de imagem válido"
     }
   },
@@ -52,16 +68,17 @@
     "welcome": "Bem-vindo, {{name}}",
     "sidebar": {
       "dashboard": "Painel",
-      "bookings": "Marcações",
-      "staff": "Staff",
+      "bookings": "Agendamentos",
+      "staff": "Equipa",
+      "staffCalendar": "Calendário da Equipa",
       "customers": "Clientes",
       "settings": "Definições",
       "services": "Serviços"
     },
     "dashboard": {
       "title": "Painel",
-      "totalBookings": "Total de Marcações",
-      "todayBookings": "As suas próximas marcações",
+      "totalBookings": "Total de Agendamentos",
+      "todayBookings": "Os seus próximos agendamentos",
       "duration": "{{duration}} minutos"
     },
     "services": {
@@ -81,7 +98,7 @@
         "save": "Guardar",
         "cancel": "Cancelar",
         "confirmClose": "Descartar alterações?",
-        "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que quer fechar?"
+        "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que deseja fechar?"
       }
     },
     "customers": {
@@ -96,57 +113,75 @@
       "status_inactive": "Inativo"
     },
     "staff": {
-      "title": "Membros da Equipa",
+      "title": "Gestão de Equipa",
       "addStaff": "Adicionar Membro",
       "name": "Nome",
       "email": "Email",
       "role": "Função",
+      "phone": "Telefone",
+      "specialties": "Especialidades",
+      "services": "Serviços",
+      "experience": "Experiência",
+      "years": "anos",
+      "status": "Estado",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "isActive": "Estado Ativo",
       "actions": "Ações",
+      "namePlaceholder": "Introduza o nome",
+      "emailPlaceholder": "Introduza o email",
+      "phonePlaceholder": "Introduza o número de telefone",
+      "specialtiesPlaceholder": "Introduza especialidades (ex. Cabelo, Maquilhagem, Unhas)",
+      "servicesPlaceholder": "Introduza serviços (ex. Corte, Penteado, Manicure)",
+      "separateWithCommas": "Separe vários itens com vírgulas",
       "selectRole": "Selecione uma função",
       "roles": {
         "admin": "Administrador",
         "staff": "Membro da Equipa"
       },
+      "validation": {
+        "nameRequired": "O nome é obrigatório",
+        "emailRequired": "O email é obrigatório",
+        "emailInvalid": "Por favor, introduza um email válido"
+      },
       "modal": {
-        "addTitle": "Adicionar Membro",
-        "editTitle": "Editar Membro",
-        "description": "Adicione ou modifique detalhes do membro.",
+        "addTitle": "Adicionar Membro da Equipa",
+        "editTitle": "Editar Membro da Equipa",
+        "description": "Adicione um novo membro da equipa ou edite um existente.",
         "save": "Guardar",
         "cancel": "Cancelar",
         "confirmClose": "Descartar alterações?",
-        "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que quer fechar?"
-      },
-      "validation": {
-        "nameRequired": "Nome é obrigatório",
-        "emailRequired": "Email é obrigatório",
-        "emailInvalid": "Por favor insira um email válido"
+        "confirmCloseDescription": "Tem alterações não guardadas. Tem a certeza que deseja descartá-las?"
       }
     },
     "settings": {
       "title": "Definições",
       "business": {
-        "title": "Definições da Empresa",
-        "info": "Informações da Empresa",
-        "name": "Nome da Empresa",
+        "title": "Definições de Negócio",
+        "info": "Informação do Negócio",
+        "name": "Nome do Negócio",
         "description": "Descrição",
         "openingTime": "Hora de Abertura",
-        "closingTime": "Hora de Fecho"
+        "closingTime": "Hora de Fecho",
+        "email": "Email do Negócio",
+        "phone": "Telefone do Negócio",
+        "address": "Morada do Negócio"
       },
       "booking": {
-        "title": "Definições de Marcação",
+        "title": "Definições de Agendamento",
         "minNotice": "Aviso Mínimo",
         "maxNotice": "Aviso Máximo",
         "slotDuration": "Duração do Intervalo",
         "bufferTime": "Tempo de Intervalo",
-        "maxBookings": "Máximo de Marcações por Intervalo"
+        "maxBookings": "Máximo de Agendamentos por Intervalo"
       },
       "notifications": {
         "title": "Definições de Notificações",
-        "emailTemplates": "Templates de Email",
-        "bookingConfirmation": "Confirmação de Marcação",
+        "emailTemplates": "Modelos de Email",
+        "bookingConfirmation": "Confirmação de Agendamento",
         "reminderTime": "Tempo de Lembrete",
         "smsNotifications": "Notificações SMS",
-        "staffNotifications": "Notificações para Staff"
+        "staffNotifications": "Notificações para a Equipa"
       },
       "appearance": {
         "title": "Definições de Aparência",
@@ -156,30 +191,49 @@
         "timeFormat": "Formato de Hora",
         "currency": "Moeda"
       },
-      "businessInfo": "Informações da Empresa",
-      "businessName": "Nome da Empresa",
+      "businessInfo": "Informação do Negócio",
+      "businessName": "Nome do Negócio",
       "description": "Descrição",
       "openingTime": "Hora de Abertura",
       "closingTime": "Hora de Fecho"
     },
     "bookings": {
-      "title": "Marcações",
-      "newBooking": "Nova Marcação",
-      "editBooking": "Editar Marcação",
+      "title": "Agendamentos",
+      "newBooking": {
+        "desktop": "Novo Agendamento",
+        "mobile": "Novo"
+      },
+      "editBooking": "Editar Agendamento",
       "customer": "Cliente",
       "selectCustomer": "Selecione um cliente",
       "service": "Serviço",
       "selectService": "Selecione um serviço",
-      "staff": "Staff",
-      "selectStaff": "Selecione um membro do staff",
+      "staff": "Profissional",
+      "selectStaff": "Selecione um profissional",
       "startTime": "Hora de Início",
       "endTime": "Hora de Fim",
       "notes": "Notas",
+      "previousWeek": "Semana Anterior",
+      "nextWeek": "Próxima Semana",
       "validation": {
-        "customerRequired": "Cliente é obrigatório",
-        "serviceRequired": "Serviço é obrigatório",
-        "staffRequired": "Membro do staff é obrigatório"
+        "customerRequired": "O cliente é obrigatório",
+        "serviceRequired": "O serviço é obrigatório",
+        "staffRequired": "O profissional é obrigatório"
       }
+    },
+    "staffCalendar": {
+      "title": "Calendário da Equipa",
+      "viewAll": "Ver Toda a Equipa",
+      "clearSelection": "Limpar Seleção",
+      "selectStaff": "Selecionar Profissionais",
+      "services": "serviços",
+      "noBookings": "Sem agendamentos para mostrar",
+      "filterByStaff": "Filtrar por Profissional",
+      "bookingDetails": "Detalhes do Agendamento",
+      "customer": "Cliente",
+      "service": "Serviço",
+      "time": "Hora",
+      "duration": "Duração"
     }
   },
   "calendar": {
@@ -192,5 +246,93 @@
     "noEventsToDisplay": "Sem eventos para mostrar",
     "allDay": "Todo o dia",
     "more": "mais"
+  },
+  "services": {
+    "title": "Os Nossos Serviços",
+    "description": "Escolha entre a nossa gama de serviços profissionais",
+    "duration": "{{duration}} minutos",
+    "select": "Selecionar Serviço",
+    "price": "{{price}}€",
+    "loading": "A carregar serviços..."
+  },
+  "staff": {
+    "title": "Escolha o Seu Estilista",
+    "description": "Selecione um estilista para o seu agendamento",
+    "select": "Escolher Estilista",
+    "availability": "Verificar Disponibilidade",
+    "experience": "{{years}} anos de experiência",
+    "specialties": "Especialidades",
+    "loading": "A carregar estilistas..."
+  },
+  "booking": {
+    "title": "Escolha Data e Hora",
+    "description": "Selecione a data e hora preferida para o seu agendamento",
+    "selectDate": "Selecionar Data",
+    "selectTime": "Selecionar Hora",
+    "available": "Disponível",
+    "unavailable": "Indisponível",
+    "next": "Continuar para Confirmação",
+    "backToDate": "Voltar à Seleção de Data",
+    "status": {
+      "pending": "Pendente",
+      "confirmed": "Confirmado",
+      "completed": "Concluído",
+      "cancelled": "Cancelado",
+      "noShow": "Não Compareceu"
+    },
+    "details": {
+      "title": "Detalhes da Marcação",
+      "status": "Estado da Marcação",
+      "bookingId": "ID da Marcação",
+      "created": "Criado em",
+      "serviceDetails": "Detalhes do Serviço",
+      "dateAndTime": "Data e Hora",
+      "staffDetails": "Detalhes do Profissional",
+      "notes": "Notas",
+      "actions": "Ações"
+    },
+    "actions": {
+      "reschedule": "Reagendar",
+      "cancel": "Cancelar Marcação"
+    },
+    "cancel": {
+      "title": "Cancelar Marcação",
+      "description": "Tem a certeza que deseja cancelar esta marcação? Esta ação não pode ser desfeita.",
+      "confirm": "Sim, Cancelar Marcação"
+    },
+    "reschedule": {
+      "title": "Reagendar Marcação",
+      "description": "Por favor, selecione uma nova data e hora para a sua marcação.",
+      "summary": "Resumo da Nova Marcação",
+      "confirm": "Confirmar Reagendamento",
+      "success": "A sua marcação foi reagendada com sucesso."
+    },
+    "notFound": {
+      "title": "Marcação Não Encontrada",
+      "description": "A marcação que procura não existe ou não tem permissão para a visualizar."
+    }
+  },
+  "confirmation": {
+    "title": "Confirmar Agendamento",
+    "description": "Por favor, reveja os detalhes do seu agendamento antes de confirmar",
+    "bookingDetails": "Detalhes do Agendamento",
+    "confirm": "Confirmar Agendamento",
+    "success": {
+      "title": "Agendamento Confirmado!",
+      "description": "O seu agendamento foi realizado com sucesso",
+      "emailSent": "Um email de confirmação foi enviado para o seu endereço de email"
+    }
+  },
+  "customer": {
+    "dashboard": {
+      "title": "Meus Agendamentos",
+      "bookNew": "Agendar Novo Serviço",
+      "nextAppointment": "Próximo Agendamento",
+      "upcomingAppointments": "Agendamentos Futuros",
+      "pastAppointments": "Agendamentos Anteriores",
+      "noUpcoming": "Não há agendamentos futuros",
+      "noPast": "Não há agendamentos anteriores",
+      "viewDetails": "Ver Detalhes"
+    }
   }
 }

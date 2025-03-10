@@ -11,6 +11,7 @@ import {
   X,
   type LucideIcon,
   Scissors,
+  Calendar,
 } from 'lucide-react'
 import { Image } from '@/components/ui/image'
 import favicon from '@/assets/images/favicon.png'
@@ -50,6 +51,12 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       label: t('admin.sidebar.staff'),
       icon: UserCog,
       href: '/admin/staff',
+      adminOnly: true,
+    },
+    {
+      label: t('admin.sidebar.staffCalendar'),
+      icon: Calendar,
+      href: '/admin/staff-calendar',
       adminOnly: true,
     },
     {
