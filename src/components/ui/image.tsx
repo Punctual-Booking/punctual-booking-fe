@@ -33,7 +33,7 @@ export const Image = ({
   return (
     <div
       className={cn(
-        'overflow-hidden',
+        'overflow-hidden relative',
         aspectRatioClass[aspectRatio],
         className
       )}

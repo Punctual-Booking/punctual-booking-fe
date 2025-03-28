@@ -8,6 +8,7 @@
     "search": "Search",
     "save": "Save",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "delete": "Delete",
     "edit": "Edit",
     "add": "Add",
@@ -39,10 +40,30 @@
     "email": "Email",
     "password": "Password",
     "name": "Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "passwordConfirmation": "Confirm Password",
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
     "namePlaceholder": "Enter your name",
-    "logout": "Logout"
+    "firstNamePlaceholder": "First name",
+    "lastNamePlaceholder": "Last name",
+    "passwordConfirmationPlaceholder": "Confirm password",
+    "logout": "Logout",
+    "registerSuccess": "Registration successful!",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "continueWithFacebook": "Continue with Facebook",
+    "orContinueWith": "or continue with",
+    "errors": {
+      "usernameExists": "This email is already registered.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "passwordMismatch": "Passwords do not match.",
+      "invalidCredentials": "Invalid email or password.",
+      "serverError": "Server error. Please try again later."
+    }
   },
   "validation": {
     "required": "This field is required",
@@ -54,6 +75,13 @@
     "name": {
       "min": "Name must be at least {{min}} characters"
     },
+    "firstName": {
+      "min": "First name must be at least {{min}} characters"
+    },
+    "lastName": {
+      "min": "Last name must be at least {{min}} characters"
+    },
+    "passwordConfirmation": "Passwords do not match",
     "service": {
       "name": "Name is required",
       "description": "Description is required",

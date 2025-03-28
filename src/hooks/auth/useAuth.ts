@@ -1,70 +1,53 @@
 import { create } from 'zustand'
-import { User } from '@/types/auth'
-import { logout } from '@/services/auth/logout'
-import { useLogin, useRegister, useCurrentUser } from '@/hooks/auth'
-import { queryClient } from '@/lib/queryClient'
+import { useLogin } from '@/hooks/auth/useLogin'
+import { useRegister } from '@/hooks/auth/useRegister'
+import { useLogout } from '@/hooks/auth/useLogout'
+import { useCurrentUser } from '@/hooks/auth/useCurrentUser'
 
 interface AuthState {
-  isAuthenticated: boolean
   isLoading: boolean
   error: string | null
-  user: User | null
-  logout: () => Promise<void>
   clearError: () => void
 }
 
-// We'll keep a zustand store for the authentication state,
-// but the actual data fetching will be handled by React Query
-export const useAuthStore = create<AuthState>(set => ({
-  isAuthenticated: false,
+/**
+ * Auth store for managing global authentication state
+ * This is kept minimal since most data is managed by React Query
+ */
+const useAuthStore = create<AuthState>(set => ({
   isLoading: false,
   error: null,
-  user: null,
-  logout: async () => {
-    set({ isLoading: true, error: null })
-    try {
-      await logout()
-      // Clear user data from React Query cache
-      queryClient.setQueryData(['user'], null)
-      set({ isAuthenticated: false, user: null })
-    } catch (error) {
-      set({ error: 'Logout failed' })
-    } finally {
-      set({ isLoading: false })
-    }
-  },
   clearError: () => set({ error: null }),
 }))
 
-// This hook combines Zustand and React Query
+/**
+ * Main authentication hook that combines all auth-related functionality
+ * Provides a unified API for login, registration, logout, and auth state
+ */
 export const useAuth = () => {
   const store = useAuthStore()
   const loginMutation = useLogin()
   const registerMutation = useRegister()
-  const currentUser = useCurrentUser()
-
-  console.log('currentUser', currentUser)
-
-  // Set the authenticated state based on the presence of a user
-  if (currentUser && !store.isAuthenticated) {
-    useAuthStore.setState({
-      isAuthenticated: true,
-      user: currentUser.user as User,
-    })
-  }
+  const logoutMutation = useLogout()
+  const { user, isAuthenticated } = useCurrentUser()
 
   return {
-    // From store
-    isAuthenticated: store.isAuthenticated,
-    user: store.user,
+    // Auth state
+    isAuthenticated,
+    user,
+    isLoading:
+      store.isLoading ||
+      loginMutation.isPending ||
+      registerMutation.isPending ||
+      logoutMutation.isPending,
     error:
       store.error ||
       loginMutation.error?.message ||
-      registerMutation.error?.message,
+      registerMutation.error?.message ||
+      logoutMutation.error?.message,
     clearError: store.clearError,
-    logout: store.logout,
 
-    // Login mutation
+    // Login
     login: async (email: string, password: string) => {
       try {
         useAuthStore.setState({ isLoading: true, error: null })
@@ -83,7 +66,7 @@ export const useAuth = () => {
     },
     isLoginLoading: loginMutation.isPending,
 
-    // Register mutation
+    // Register
     register: async (
       firstName: string,
       lastName: string,
@@ -113,5 +96,24 @@ export const useAuth = () => {
       }
     },
     isRegisterLoading: registerMutation.isPending,
+
+    // Logout
+    logout: async () => {
+      try {
+        useAuthStore.setState({ isLoading: true, error: null })
+        await logoutMutation.mutateAsync()
+        return true
+      } catch (error) {
+        if (error instanceof Error) {
+          useAuthStore.setState({ error: error.message })
+        } else {
+          useAuthStore.setState({ error: 'Logout failed' })
+        }
+        return false
+      } finally {
+        useAuthStore.setState({ isLoading: false })
+      }
+    },
+    isLogoutLoading: logoutMutation.isPending,
   }
 }

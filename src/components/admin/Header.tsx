@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
-import { useAuthStore } from '@/stores/auth/useAuthStore'
+import { useAuth } from '@/hooks/auth'
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
@@ -10,7 +10,7 @@ interface HeaderProps {
 
 export const Header = ({ children }: HeaderProps) => {
   const { t } = useTranslation()
-  const { user, logout } = useAuthStore()
+  const { user, logout } = useAuth()
   const { businessName } = useSettingsStore()
 
   return (

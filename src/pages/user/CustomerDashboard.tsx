@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useBookingStore } from '@/stores/useBookingStore'
-import { useAuthStore } from '@/stores/auth/useAuthStore'
+import { useAuth } from '@/hooks/auth'
 import { CalendarDays, Clock, Scissors, ChevronRight } from 'lucide-react'
 import { format } from 'date-fns'
 import { Loading } from '@/components/ui/loading'
@@ -12,7 +12,7 @@ import { Loading } from '@/components/ui/loading'
 const CustomerDashboard = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { user } = useAuthStore()
+  const { user } = useAuth()
   const { userBookings, fetchUserBookings, isLoading } = useBookingStore()
 
   useEffect(() => {

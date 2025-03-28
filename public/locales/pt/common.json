@@ -8,6 +8,7 @@
     "search": "Pesquisar",
     "save": "Guardar",
     "cancel": "Cancelar",
+    "confirm": "Confirmar",
     "delete": "Eliminar",
     "edit": "Editar",
     "add": "Adicionar",
@@ -40,11 +41,26 @@
     "email": "Email",
     "password": "Palavra-passe",
     "name": "Nome",
-
+    "firstName": "Nome Próprio",
+    "lastName": "Apelido",
+    "passwordConfirmation": "Confirmar Palavra-passe",
     "emailPlaceholder": "Introduza o seu email",
     "passwordPlaceholder": "Introduza a sua palavra-passe",
     "namePlaceholder": "Introduza o seu nome",
-    "logout": "Terminar Sessão"
+    "firstNamePlaceholder": "Nome próprio",
+    "lastNamePlaceholder": "Apelido",
+    "passwordConfirmationPlaceholder": "Confirmar palavra-passe",
+    "logout": "Terminar Sessão",
+    "registerSuccess": "Registo efetuado com sucesso!",
+    "noAccount": "Não tem uma conta?",
+    "haveAccount": "Já tem uma conta?",
+    "errors": {
+      "usernameExists": "Este email já está registado.",
+      "registrationFailed": "Erro no registo. Por favor, tente novamente.",
+      "passwordMismatch": "As palavras-passe não coincidem.",
+      "invalidCredentials": "Email ou palavra-passe inválidos.",
+      "serverError": "Erro de servidor. Por favor, tente mais tarde."
+    }
   },
   "validation": {
     "required": "Este campo é obrigatório",
@@ -56,6 +72,13 @@
     "name": {
       "min": "O nome deve ter pelo menos {{min}} caracteres"
     },
+    "firstName": {
+      "min": "O nome próprio deve ter pelo menos {{min}} caracteres"
+    },
+    "lastName": {
+      "min": "O apelido deve ter pelo menos {{min}} caracteres"
+    },
+    "passwordConfirmation": "As palavras-passe não coincidem",
     "service": {
       "name": "O nome é obrigatório",
       "description": "A descrição é obrigatória",

@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from '@tanstack/react-router'
 import { Sidebar } from '@/components/admin/Sidebar'
 import { Header } from '@/components/admin/Header'
 import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
 
-export const AdminLayout = () => {
+interface AdminLayoutProps {
+  children?: React.ReactNode
+}
+
+export const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -23,7 +27,7 @@ export const AdminLayout = () => {
           </Button>
         </Header>
         <main className="container py-6 lg:py-10">
-          <Outlet />
+          {children || <Outlet />}
         </main>
       </div>
     </div>

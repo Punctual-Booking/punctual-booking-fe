@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,8 @@ import { Image } from '@/components/ui/image'
 import favicon from '@/assets/images/favicon.png'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
+import { useState, useEffect } from 'react'
+import { UserRole } from '@/types/auth'
 
 interface SidebarProps {
   isOpen: boolean
@@ -33,8 +35,22 @@ interface SidebarItem {
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
-  const { pathname } = useLocation()
+  const router = useRouter()
   const { role } = useAuth()
+  const [activePath, setActivePath] = useState(router.state.location.pathname)
+
+  // Update active path when location changes
+  useEffect(() => {
+    // Update the active path on initial render
+    setActivePath(router.state.location.pathname)
+
+    // Listen for changes in the router state
+    const unsubscribe = router.history.subscribe(() => {
+      setActivePath(router.state.location.pathname)
+    })
+
+    return unsubscribe
+  }, [router])
 
   const sidebarItems: SidebarItem[] = [
     {
@@ -79,8 +95,15 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   ]
 
   const filteredItems = sidebarItems.filter(
-    item => !item.adminOnly || role === 'admin'
+    item => !item.adminOnly || role === UserRole.ADMIN
   )
+
+  const isActive = (href: string) => {
+    if (href === '/admin' && activePath === '/admin/') {
+      return true
+    }
+    return activePath === href
+  }
 
   return (
     <>
@@ -100,7 +123,13 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         )}
       >
         <div className="flex h-14 items-center justify-between border-b px-6">
-          <Link to="/admin" className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => {
+              router.navigate({ to: '/admin' })
+              onClose()
+            }}
+          >
             {theme === 'light' && (
               <Image
                 src={favicon}
@@ -110,7 +139,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               />
             )}
             <span className="font-semibold">{t('app.name')}</span>
-          </Link>
+          </div>
 
           <Button
             variant="ghost"
@@ -124,21 +153,22 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <nav className="flex-1 space-y-1 p-4">
           {filteredItems.map(item => {
             const Icon = item.icon
+            const active = isActive(item.href)
+
             return (
               <Button
                 key={item.href}
-                variant={pathname === item.href ? 'secondary' : 'ghost'}
-                className={cn(
-                  'w-full justify-start',
-                  pathname === item.href && 'bg-secondary'
-                )}
-                asChild
-                onClick={onClose}
+                variant={active ? 'secondary' : 'ghost'}
+                className={cn('w-full justify-start', active && 'bg-secondary')}
+                onClick={() => {
+                  router.navigate({ to: item.href })
+                  onClose()
+                }}
               >
-                <Link to={item.href}>
+                <div className="flex items-center">
                   <Icon className="mr-2 h-4 w-4" />
                   {item.label}
-                </Link>
+                </div>
               </Button>
             )
           })}

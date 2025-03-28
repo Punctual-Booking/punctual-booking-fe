@@ -2,14 +2,14 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { useAuthStore } from '@/stores/auth/useAuthStore'
+import { useAuth } from '@/hooks/auth'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { ThemeSwitcher } from '@/components/common/ThemeSwitcher'
 
 export const Header = () => {
   const { t } = useTranslation()
-  const { logout } = useAuthStore()
+  const { logout } = useAuth()
   const { business, fetchSettings } = useSettingsStore()
 
   useEffect(() => {
