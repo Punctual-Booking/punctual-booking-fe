@@ -276,7 +276,8 @@
     "duration": "{{duration}} minutos",
     "select": "Selecionar Serviço",
     "price": "{{price}}€",
-    "loading": "A carregar serviços..."
+    "loading": "A carregar serviços...",
+    "selected": "Serviço Selecionado"
   },
   "staff": {
     "title": "Escolha o Seu Estilista",
@@ -285,7 +286,8 @@
     "availability": "Verificar Disponibilidade",
     "experience": "{{years}} anos de experiência",
     "specialties": "Especialidades",
-    "loading": "A carregar estilistas..."
+    "loading": "A carregar estilistas...",
+    "noStaffAvailable": "Não há estilistas disponíveis para este serviço. Por favor, selecione um serviço diferente."
   },
   "booking": {
     "title": "Escolha Data e Hora",
@@ -340,10 +342,15 @@
     "description": "Por favor, reveja os detalhes do seu agendamento antes de confirmar",
     "bookingDetails": "Detalhes do Agendamento",
     "confirm": "Confirmar Agendamento",
+    "notes": "Pedidos Especiais ou Notas",
+    "notesPlaceholder": "Quaisquer pedidos especiais ou informações para o seu estilista (opcional)",
+    "creating": "A criar o seu agendamento...",
     "success": {
       "title": "Agendamento Confirmado!",
       "description": "O seu agendamento foi realizado com sucesso",
-      "emailSent": "Um email de confirmação foi enviado para o seu endereço de email"
+      "emailSent": "Um email de confirmação foi enviado para o seu endereço de email",
+      "with": "com",
+      "viewAppointments": "Ver Meus Agendamentos"
     }
   },
   "customer": {
@@ -357,5 +364,16 @@
       "noPast": "Não há agendamentos anteriores",
       "viewDetails": "Ver Detalhes"
     }
+  },
+  "appointments": {
+    "createSuccess": "Agendamento criado com sucesso",
+    "createError": "Falha ao criar agendamento",
+    "updateSuccess": "Agendamento atualizado com sucesso",
+    "updateError": "Falha ao atualizar agendamento",
+    "cancelSuccess": "Agendamento cancelado com sucesso",
+    "cancelError": "Falha ao cancelar agendamento",
+    "rescheduleSuccess": "Agendamento remarcado com sucesso",
+    "rescheduleError": "Falha ao remarcar agendamento",
+    "fetchError": "Falha ao carregar agendamentos"
   }
 }

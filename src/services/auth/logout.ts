@@ -1,7 +1,15 @@
 import { AUTH_ENDPOINTS, getDefaultFetchOptions } from '@/config/api'
+import { FEATURES } from '@/config'
+import { mockLogout } from '@/mocks/mockAuthService'
 
 export const logout = async (): Promise<void> => {
   try {
+    // Use mock implementation if feature flag is enabled
+    if (FEATURES.MOCK_AUTH) {
+      console.log('Using mock auth service for logout')
+      return mockLogout()
+    }
+
     // Remove token from localStorage
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')

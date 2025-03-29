@@ -278,7 +278,8 @@
     "duration": "{{duration}} minutes",
     "select": "Select Service",
     "price": "${price}",
-    "loading": "Loading services..."
+    "loading": "Loading services...",
+    "selected": "Selected Service"
   },
   "staff": {
     "title": "Choose Your Stylist",
@@ -287,7 +288,8 @@
     "availability": "Check Availability",
     "experience": "{{years}} years experience",
     "specialties": "Specialties",
-    "loading": "Loading staff members..."
+    "loading": "Loading staff members...",
+    "noStaffAvailable": "No staff members are available for this service. Please select a different service."
   },
   "booking": {
     "title": "Choose Date & Time",
@@ -342,10 +344,15 @@
     "description": "Please review your booking details before confirming",
     "bookingDetails": "Booking Details",
     "confirm": "Confirm Booking",
+    "notes": "Special Requests or Notes",
+    "notesPlaceholder": "Any special requests or information for your stylist (optional)",
+    "creating": "Creating your appointment...",
     "success": {
       "title": "Booking Confirmed!",
       "description": "Your appointment has been successfully booked",
-      "emailSent": "A confirmation email has been sent to your email address"
+      "emailSent": "A confirmation email has been sent to your email address",
+      "with": "with",
+      "viewAppointments": "View My Appointments"
     }
   },
   "customer": {
@@ -359,5 +366,16 @@
       "noPast": "No past appointments",
       "viewDetails": "View Details"
     }
+  },
+  "appointments": {
+    "createSuccess": "Appointment created successfully",
+    "createError": "Failed to create appointment",
+    "updateSuccess": "Appointment updated successfully",
+    "updateError": "Failed to update appointment",
+    "cancelSuccess": "Appointment cancelled successfully",
+    "cancelError": "Failed to cancel appointment",
+    "rescheduleSuccess": "Appointment rescheduled successfully",
+    "rescheduleError": "Failed to reschedule appointment",
+    "fetchError": "Failed to load appointments"
   }
 }

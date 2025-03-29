@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { format, addDays, startOfDay, isBefore, isAfter } from 'date-fns'
 import {
@@ -27,8 +27,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Calendar as CalendarComponent } from '@/components/ui/calendar'
-import { useBookingStore } from '@/stores/useBookingStore'
-import { Booking, BookingStatus } from '@/types/booking'
+import { AppointmentStatus } from '@/types/appointment'
+import { useAppointments } from '@/hooks/appointments/useAppointments'
+import { useAuth } from '@/hooks/auth'
 
 // Mock available time slots
 const generateTimeSlots = (date: Date) => {
@@ -62,15 +63,21 @@ const generateTimeSlots = (date: Date) => {
 }
 
 const BookingDetails = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams({ from: '/booking-details/$id' })
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { userBookings, isLoading } = useBookingStore()
-  const [booking, setBooking] = useState<Booking | null>(null)
+  const { user } = useAuth()
+  const {
+    appointments,
+    isLoading,
+    updateAppointment,
+    cancelAppointment,
+    isUpdating,
+  } = useAppointments(user?.id)
+
+  const [booking, setBooking] = useState<any>(null)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [showRescheduleDialog, setShowRescheduleDialog] = useState(false)
-  const [isCancelling, setIsCancelling] = useState(false)
-  const [isRescheduling, setIsRescheduling] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<Date | undefined>(undefined)
   const [timeSlots, setTimeSlots] = useState<
@@ -79,11 +86,13 @@ const BookingDetails = () => {
   const [rescheduleStep, setRescheduleStep] = useState<'date' | 'time'>('date')
 
   useEffect(() => {
-    if (id && userBookings.length > 0) {
-      const foundBooking = userBookings.find(booking => booking.id === id)
+    if (id && appointments.length > 0) {
+      const foundBooking = appointments.find(
+        appointment => appointment.id === id
+      )
       setBooking(foundBooking || null)
     }
-  }, [id, userBookings])
+  }, [id, appointments])
 
   // Generate time slots when a date is selected
   useEffect(() => {
@@ -93,42 +102,38 @@ const BookingDetails = () => {
     }
   }, [selectedDate])
 
-  const getStatusColor = (status: BookingStatus) => {
+  const getStatusColor = (status: AppointmentStatus) => {
     switch (status) {
-      case BookingStatus.CONFIRMED:
+      case AppointmentStatus.SCHEDULED:
         return 'bg-green-100 text-green-800 border-green-200'
-      case BookingStatus.PENDING:
+      case AppointmentStatus.RESCHEDULED:
         return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case BookingStatus.COMPLETED:
+      case AppointmentStatus.COMPLETED:
         return 'bg-blue-100 text-blue-800 border-blue-200'
-      case BookingStatus.CANCELLED:
+      case AppointmentStatus.CANCELLED:
         return 'bg-red-100 text-red-800 border-red-200'
-      case BookingStatus.NO_SHOW:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
-  const getStatusLabel = (status: BookingStatus) => {
+  const getStatusLabel = (status: AppointmentStatus) => {
     switch (status) {
-      case BookingStatus.CONFIRMED:
+      case AppointmentStatus.SCHEDULED:
         return t('booking.status.confirmed')
-      case BookingStatus.PENDING:
+      case AppointmentStatus.RESCHEDULED:
         return t('booking.status.pending')
-      case BookingStatus.COMPLETED:
+      case AppointmentStatus.COMPLETED:
         return t('booking.status.completed')
-      case BookingStatus.CANCELLED:
+      case AppointmentStatus.CANCELLED:
         return t('booking.status.cancelled')
-      case BookingStatus.NO_SHOW:
-        return t('booking.status.noShow')
       default:
         return status
     }
   }
 
   const handleBack = () => {
-    navigate(-1)
+    navigate({ to: '/user/dashboard' })
   }
 
   const handleRescheduleClick = () => {
@@ -139,7 +144,7 @@ const BookingDetails = () => {
   }
 
   const handleRescheduleDialogClose = () => {
-    if (!isRescheduling) {
+    if (!isUpdating) {
       setShowRescheduleDialog(false)
     }
   }
@@ -163,31 +168,17 @@ const BookingDetails = () => {
   const handleRescheduleConfirm = () => {
     if (!booking || !selectedDate || !selectedTime) return
 
-    setIsRescheduling(true)
+    // Update the appointment with the API
+    updateAppointment({
+      id: booking.id,
+      data: {
+        appointmentTime: selectedTime.toISOString(),
+        status: AppointmentStatus.RESCHEDULED,
+      },
+    })
 
-    // Calculate end time (assuming same duration as original booking)
-    const originalDuration =
-      new Date(booking.endTime).getTime() -
-      new Date(booking.startTime).getTime()
-    const newEndTime = new Date(selectedTime.getTime() + originalDuration)
-
-    // Simulate API call to reschedule booking
-    setTimeout(() => {
-      console.log('Booking rescheduled:', booking.id, 'New time:', selectedTime)
-      setIsRescheduling(false)
-      setShowRescheduleDialog(false)
-
-      // Update the booking with new times
-      setBooking({
-        ...booking,
-        startTime: selectedTime.toISOString(),
-        endTime: newEndTime.toISOString(),
-        status: BookingStatus.CONFIRMED,
-      })
-
-      // In a real app, you would call an API to reschedule the booking
-      // and then update the state with the response
-    }, 1500)
+    // Close the dialog (the query will automatically refresh)
+    setShowRescheduleDialog(false)
   }
 
   const handleCancelClick = () => {
@@ -197,27 +188,15 @@ const BookingDetails = () => {
   const handleCancelConfirm = () => {
     if (!booking) return
 
-    setIsCancelling(true)
+    // Cancel the appointment with the API
+    cancelAppointment(booking.id)
 
-    // Simulate API call to cancel booking
-    setTimeout(() => {
-      console.log('Booking cancelled:', booking.id)
-      setIsCancelling(false)
-      setShowCancelDialog(false)
-
-      // Update the booking status locally
-      setBooking({
-        ...booking,
-        status: BookingStatus.CANCELLED,
-      })
-
-      // In a real app, you would call an API to cancel the booking
-      // and then update the state with the response
-    }, 1000)
+    // Close the dialog (the query will automatically refresh)
+    setShowCancelDialog(false)
   }
 
   const handleCancelDialogClose = () => {
-    if (!isCancelling) {
+    if (!isUpdating) {
       setShowCancelDialog(false)
     }
   }
@@ -236,7 +215,7 @@ const BookingDetails = () => {
         <p className="text-muted-foreground mb-6">
           {t('booking.notFound.description')}
         </p>
-        <Button onClick={() => navigate('/user/dashboard')}>
+        <Button onClick={() => navigate({ to: '/user/dashboard' })}>
           {t('common.backToDashboard')}
         </Button>
       </div>
@@ -244,11 +223,11 @@ const BookingDetails = () => {
   }
 
   const isUpcoming = new Date(booking.startTime) > new Date()
-  const canCancel = isUpcoming && booking.status !== BookingStatus.CANCELLED
+  const canCancel = isUpcoming && booking.status !== AppointmentStatus.CANCELLED
   const canReschedule =
     isUpcoming &&
-    (booking.status === BookingStatus.CONFIRMED ||
-      booking.status === BookingStatus.PENDING)
+    (booking.status === AppointmentStatus.SCHEDULED ||
+      booking.status === AppointmentStatus.RESCHEDULED)
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 p-4">
@@ -452,16 +431,16 @@ const BookingDetails = () => {
             <Button
               variant="outline"
               onClick={handleCancelDialogClose}
-              disabled={isCancelling}
+              disabled={isUpdating}
             >
               {t('common.cancel')}
             </Button>
             <Button
               variant="destructive"
               onClick={handleCancelConfirm}
-              disabled={isCancelling}
+              disabled={isUpdating}
             >
-              {isCancelling ? (
+              {isUpdating ? (
                 <>
                   <span className="mr-2">{t('common.loading')}</span>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -564,7 +543,7 @@ const BookingDetails = () => {
             <Button
               variant="outline"
               onClick={handleRescheduleDialogClose}
-              disabled={isRescheduling}
+              disabled={isUpdating}
             >
               {t('common.cancel')}
             </Button>
@@ -572,9 +551,9 @@ const BookingDetails = () => {
               <Button
                 variant="default"
                 onClick={handleRescheduleConfirm}
-                disabled={isRescheduling || !selectedTime}
+                disabled={isUpdating || !selectedTime}
               >
-                {isRescheduling ? (
+                {isUpdating ? (
                   <>
                     <span className="mr-2">{t('common.loading')}</span>
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

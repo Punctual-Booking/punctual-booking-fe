@@ -8,6 +8,7 @@ export interface StaffMember {
   services: string[]
   yearsOfExperience: number
   isActive: boolean
+  businessId: string
 }
 
 export interface StaffMemberPartial {
@@ -20,4 +21,5 @@ export interface StaffMemberPartial {
   services?: string[]
   yearsOfExperience?: number
   isActive?: boolean
+  businessId?: string
 }

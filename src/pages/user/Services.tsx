@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useServiceStore } from '@/stores/useServiceStore'
@@ -12,15 +12,19 @@ export const ServicesPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { services, fetchServices, isLoading } = useServiceStore()
-  const { setSelectedService } = useBookingStore()
+  const { setSelectedService, resetBooking } = useBookingStore()
 
   useEffect(() => {
+    // Reset any previous booking data when starting a new booking flow
+    resetBooking()
+    // Fetch available services
     fetchServices()
-  }, [fetchServices])
+  }, [fetchServices, resetBooking])
 
   const handleSelectService = (service: Service) => {
+    // Save the selected service to the booking store
     setSelectedService(service)
-    navigate('/user/staff-selection')
+    navigate({ to: '/user/staff-selection' })
   }
 
   if (isLoading) {

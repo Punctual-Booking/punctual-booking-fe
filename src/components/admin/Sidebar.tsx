@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { Image } from '@/components/ui/image'
 import favicon from '@/assets/images/favicon.png'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/auth/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 import { useState, useEffect } from 'react'
 import { UserRole } from '@/types/auth'
@@ -36,7 +36,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const router = useRouter()
-  const { role } = useAuth()
+  const { user } = useAuth()
   const [activePath, setActivePath] = useState(router.state.location.pathname)
 
   // Update active path when location changes
@@ -95,7 +95,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   ]
 
   const filteredItems = sidebarItems.filter(
-    item => !item.adminOnly || role === UserRole.ADMIN
+    item => !item.adminOnly || user?.role === UserRole.ADMIN
   )
 
   const isActive = (href: string) => {

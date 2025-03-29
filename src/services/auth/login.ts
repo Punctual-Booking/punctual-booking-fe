@@ -1,6 +1,8 @@
 import { User } from '@/types/auth'
 import { AUTH_ENDPOINTS, getDefaultFetchOptions } from '@/config/api'
 import { hashPassword } from '@/utils/authentication/passwordUtils'
+import { FEATURES } from '@/config'
+import { mockLogin } from '@/mocks/mockAuthService'
 
 interface LoginRequest {
   email: string
@@ -14,8 +16,14 @@ interface TokenResponseDto {
 
 export const login = async (email: string, password: string): Promise<User> => {
   try {
+    // Use mock implementation if feature flag is enabled
+    if (FEATURES.MOCK_AUTH) {
+      console.log('Using mock auth service for login')
+      return mockLogin(email, password)
+    }
+
     // Hash the password before sending
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword = password //await hashPassword(password) for testing
 
     // Build request payload with hashed password
     const requestData: LoginRequest = {

@@ -6,11 +6,17 @@ import { queryClient } from '@/lib/queryClient'
  * Can be extended to fetch user data from an API if not available
  */
 export const useCurrentUser = () => {
+  const userData = queryClient.getQueryData<User>(['user'])
+  console.log('useCurrentUser - cached user data:', userData)
+
+  const isAuthenticated = !!userData
+  console.log('useCurrentUser - isAuthenticated:', isAuthenticated)
+
   return {
     // Return cached user data
-    user: queryClient.getQueryData<User>(['user']),
+    user: userData,
 
     // Check if user is authenticated
-    isAuthenticated: !!queryClient.getQueryData<User>(['user']),
+    isAuthenticated,
   }
 }

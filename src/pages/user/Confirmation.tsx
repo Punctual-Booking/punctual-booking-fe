@@ -1,32 +1,64 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { format } from 'date-fns'
 import { CalendarDays, Clock, Scissors, User } from 'lucide-react'
+import { useAuth } from '@/hooks/auth'
+import { useAppointments } from '@/hooks/appointments/useAppointments'
+import { Textarea } from '@/components/ui/textarea'
+import { Loading } from '@/components/ui/loading'
+import { BUSINESS_ID } from '@/config'
 
 export const ConfirmationPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { selectedService, selectedStaff } = useBookingStore()
+  const [notes, setNotes] = useState('')
+  const { user } = useAuth()
+  const { createAppointment, isCreating } = useAppointments(user?.id)
+
+  // For demonstration purposes, we'll use the current time
+  // In the real implementation, this would come from the booking page
+  const appointmentTime = new Date()
+  // Move to next hour for demo
+  appointmentTime.setHours(appointmentTime.getHours() + 1)
+  appointmentTime.setMinutes(0)
+  appointmentTime.setSeconds(0)
+  appointmentTime.setMilliseconds(0)
 
   useEffect(() => {
     if (!selectedService || !selectedStaff) {
-      navigate('/user/services')
+      navigate({ to: '/user/services' })
       return
     }
   }, [selectedService, selectedStaff, navigate])
 
   const handleConfirm = async () => {
     try {
-      // TODO: Implement booking confirmation
-      console.log('Booking confirmed')
-      navigate('/user/booking-success')
+      if (!selectedService || !selectedStaff || !user) {
+        return
+      }
+
+      await createAppointment({
+        staffId: selectedStaff.id,
+        serviceId: selectedService.id,
+        appointmentTime: appointmentTime.toISOString(),
+        customerNotes: notes.trim() || undefined,
+      })
+
+      navigate({ to: '/user/booking-success' })
     } catch (error) {
       console.error('Error confirming booking:', error)
     }
+  }
+
+  if (isCreating) {
+    return (
+      <Loading centered className="py-8" text={t('confirmation.creating')} />
+    )
   }
 
   return (
@@ -72,7 +104,7 @@ export const ConfirmationPage = () => {
               <CalendarDays className="h-5 w-5 text-muted-foreground" />
               <div>
                 <p className="font-medium">
-                  {format(new Date(), 'EEEE, MMMM d, yyyy')}
+                  {format(appointmentTime, 'EEEE, MMMM d, yyyy')}
                 </p>
               </div>
             </div>
@@ -80,13 +112,31 @@ export const ConfirmationPage = () => {
             <div className="flex items-center gap-3">
               <Clock className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="font-medium">{format(new Date(), 'HH:mm')}</p>
+                <p className="font-medium">
+                  {format(appointmentTime, 'HH:mm')}
+                </p>
               </div>
             </div>
           </div>
 
+          <div className="space-y-2">
+            <label htmlFor="notes" className="text-sm font-medium">
+              {t('confirmation.notes')}
+            </label>
+            <Textarea
+              id="notes"
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder={t('confirmation.notesPlaceholder')}
+              className="resize-none"
+            />
+          </div>
+
           <div className="flex justify-between items-center pt-6 border-t">
-            <Button variant="outline" onClick={() => navigate(-1)}>
+            <Button
+              variant="outline"
+              onClick={() => navigate({ to: '/user/staff-selection' })}
+            >
               {t('common.back')}
             </Button>
             <Button onClick={handleConfirm}>{t('confirmation.confirm')}</Button>

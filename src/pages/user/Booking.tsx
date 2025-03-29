@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useBookingStore } from '@/stores/useBookingStore'
@@ -14,7 +14,7 @@ export const BookingPage = () => {
 
   useEffect(() => {
     if (!selectedService || !selectedStaff) {
-      navigate('/user/services')
+      navigate({ to: '/user/services' })
       return
     }
   }, [selectedService, selectedStaff, navigate])
@@ -22,7 +22,7 @@ export const BookingPage = () => {
   const handleTimeSelect = (time: Date) => {
     // TODO: Implement time selection logic
     console.log('Selected time:', time)
-    navigate('/user/confirmation')
+    navigate({ to: '/user/confirmation' })
   }
 
   return (

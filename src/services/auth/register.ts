@@ -2,6 +2,8 @@ import { User } from '@/types/auth'
 import { AUTH_ENDPOINTS, getDefaultFetchOptions } from '@/config/api'
 import i18next from 'i18next'
 import { hashPasswords } from '@/utils/authentication/passwordUtils'
+import { FEATURES } from '@/config'
+import { mockRegister } from '@/mocks/mockAuthService'
 
 interface RegisterRequest {
   firstName: string
@@ -19,6 +21,18 @@ export const register = async (
   passwordConfirmation: string
 ): Promise<User> => {
   try {
+    // Use mock implementation if feature flag is enabled
+    if (FEATURES.MOCK_AUTH) {
+      console.log('Using mock auth service for registration')
+      return mockRegister(
+        firstName,
+        lastName,
+        email,
+        password,
+        passwordConfirmation
+      )
+    }
+
     // Client-side validation
     if (password !== passwordConfirmation) {
       throw new Error(
@@ -27,10 +41,12 @@ export const register = async (
     }
 
     // Hash passwords before transmitting
-    const { hashedPassword, hashedConfirmPassword } = await hashPasswords(
-      password,
-      passwordConfirmation
-    )
+    const hashedPassword = password //await hashPasswords(password) for testing
+    const hashedConfirmPassword = passwordConfirmation //await hashPasswords(passwordConfirmation) for testing
+    // const { hashedPassword, hashedConfirmPassword } = await hashPasswords(
+    //   password,
+    //   passwordConfirmation
+    // )
 
     // Build request payload with hashed passwords
     const requestData: RegisterRequest = {
