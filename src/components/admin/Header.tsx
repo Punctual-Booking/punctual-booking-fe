@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/auth'
@@ -8,10 +9,18 @@ interface HeaderProps {
   children?: React.ReactNode
 }
 
-export const Header = ({ children }: HeaderProps) => {
+/**
+ * Admin Header component - memoized to prevent unnecessary rerenders
+ */
+export const Header = memo(({ children }: HeaderProps) => {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
   const { businessName } = useSettingsStore()
+
+  // Memoize the logout handler to prevent recreating on each render
+  const handleLogout = useCallback(() => {
+    logout()
+  }, [logout])
 
   return (
     <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -25,11 +34,11 @@ export const Header = ({ children }: HeaderProps) => {
         </div>
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
-          <Button variant="ghost" size="sm" onClick={logout}>
+          <Button variant="ghost" size="sm" onClick={handleLogout}>
             {t('auth.logout')}
           </Button>
         </div>
       </div>
     </header>
   )
-}
+})

@@ -10,8 +10,9 @@ import {
 import { useAuth } from '@/hooks/auth'
 import { Loading } from '@/components/ui/loading'
 import { Separator } from '@/components/ui/separator'
+import { forwardRef } from 'react'
 
-export const LoginForm = () => {
+export const LoginForm = forwardRef<HTMLDivElement>((props, ref) => {
   const { t } = useTranslation('common')
   const { login, isLoginLoading, error } = useAuth()
 
@@ -33,8 +34,29 @@ export const LoginForm = () => {
     // In the future, this would redirect to the OAuth flow
   }
 
+  // Format error message for display with translations
+  const getErrorMessage = (error: string | null) => {
+    if (!error) return null
+
+    // Map backend error messages to translation keys
+    if (error.includes('credentials') || error.includes('Invalid')) {
+      return t('auth.errors.invalidCredentials', 'Invalid email or password')
+    }
+
+    // For server errors
+    if (error.includes('500') || error.includes('server')) {
+      return t(
+        'auth.errors.serverError',
+        'Server error, please try again later'
+      )
+    }
+
+    // Default fallback
+    return error
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" ref={ref}>
       <div className="grid grid-cols-1 gap-2">
         <Button
           type="button"
@@ -137,7 +159,25 @@ export const LoginForm = () => {
           error={errors.password?.message}
           {...register('password')}
         />
-        {error && <p className="text-sm text-destructive">{error}</p>}
+
+        <div className="flex justify-end">
+          <Button
+            variant="link"
+            className="p-0 h-auto text-xs text-muted-foreground"
+            type="button"
+            onClick={() => console.log('Forgot password clicked')}
+          >
+            {t('auth.forgotPassword', 'Forgot password?')}
+          </Button>
+        </div>
+
+        {error && (
+          <div className="rounded-md bg-destructive/15 dark:bg-destructive/25 p-3 border border-destructive/30 dark:border-destructive/40">
+            <p className="text-sm font-medium text-destructive dark:text-red-400">
+              {getErrorMessage(error)}
+            </p>
+          </div>
+        )}
         <Button type="submit" className="w-full" disabled={isLoginLoading}>
           {isLoginLoading ? (
             <Loading size="sm" text="" className="justify-center" />
@@ -148,4 +188,6 @@ export const LoginForm = () => {
       </form>
     </div>
   )
-}
+})
+
+LoginForm.displayName = 'LoginForm'

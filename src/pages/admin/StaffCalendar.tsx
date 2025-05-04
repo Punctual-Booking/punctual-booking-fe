@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FullCalendarComponent } from '@/components/ui/full-calendar'
+import FullCalendar from '@fullcalendar/react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -19,6 +19,12 @@ import {
 import { ChevronLeft, ChevronRight, Info } from 'lucide-react'
 import { StaffMember } from '@/types/staff'
 import ptLocale from '@fullcalendar/core/locales/pt'
+import { BUSINESS_ID } from '@/config'
+import { cn } from '@/lib/utils'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import { DatesSetArg } from '@fullcalendar/core'
 
 // Mock data for staff members
 const mockStaffMembers: StaffMember[] = [
@@ -31,6 +37,7 @@ const mockStaffMembers: StaffMember[] = [
     services: ['Haircut', 'Styling'],
     yearsOfExperience: 5,
     isActive: true,
+    businessId: BUSINESS_ID,
   },
   {
     id: '2',
@@ -41,6 +48,7 @@ const mockStaffMembers: StaffMember[] = [
     services: ['Manicure', 'Facial'],
     yearsOfExperience: 3,
     isActive: true,
+    businessId: BUSINESS_ID,
   },
   {
     id: '3',
@@ -51,6 +59,7 @@ const mockStaffMembers: StaffMember[] = [
     services: ['Swedish Massage', 'Deep Tissue'],
     yearsOfExperience: 7,
     isActive: false,
+    businessId: BUSINESS_ID,
   },
 ]
 
@@ -63,6 +72,7 @@ const mockBookings = [
     end: new Date(new Date().setHours(10, 30, 0, 0)),
     staffId: '1',
     resourceId: '1',
+    status: 'confirmed',
   },
   {
     id: '2',
@@ -71,6 +81,7 @@ const mockBookings = [
     end: new Date(new Date().setHours(12, 0, 0, 0)),
     staffId: '1',
     resourceId: '1',
+    status: 'pending',
   },
   {
     id: '3',
@@ -79,6 +90,7 @@ const mockBookings = [
     end: new Date(new Date().setHours(11, 0, 0, 0)),
     staffId: '2',
     resourceId: '2',
+    status: 'confirmed',
   },
   {
     id: '4',
@@ -87,6 +99,7 @@ const mockBookings = [
     end: new Date(new Date().setHours(15, 30, 0, 0)),
     staffId: '2',
     resourceId: '2',
+    status: 'completed',
   },
   {
     id: '5',
@@ -95,17 +108,18 @@ const mockBookings = [
     end: new Date(new Date().setHours(10, 0, 0, 0)),
     staffId: '3',
     resourceId: '3',
+    status: 'cancelled',
   },
 ]
 
 // Define staff colors at the component level so they can be used in multiple places
 const staffColors = [
-  'bg-blue-100 border-blue-300 text-blue-800',
-  'bg-green-100 border-green-300 text-green-800',
-  'bg-purple-100 border-purple-300 text-purple-800',
-  'bg-yellow-100 border-yellow-300 text-yellow-800',
-  'bg-pink-100 border-pink-300 text-pink-800',
-  'bg-indigo-100 border-indigo-300 text-indigo-800',
+  'bg-blue-50 border-blue-200 text-black',
+  'bg-green-50 border-green-200 text-black',
+  'bg-purple-50 border-purple-200 text-black',
+  'bg-amber-50 border-amber-200 text-black',
+  'bg-pink-50 border-pink-200 text-black',
+  'bg-indigo-50 border-indigo-200 text-black',
 ]
 
 // Helper function to get staff color
@@ -125,7 +139,7 @@ export const StaffCalendarPage = () => {
   // Filter bookings based on selected staff
   useEffect(() => {
     if (selectedStaff.length === 0) {
-      setFilteredBookings([])
+      setFilteredBookings(mockBookings)
     } else {
       setFilteredBookings(
         mockBookings.filter(booking => selectedStaff.includes(booking.staffId))
@@ -189,6 +203,235 @@ export const StaffCalendarPage = () => {
       month: 'long',
       day: 'numeric',
     }).format(date)
+  }
+
+  // Helper function to format event title for better readability
+  const formatEventTitle = (serviceName: string, customerName: string) => {
+    return {
+      service: serviceName || t('calendar.event.defaultService'),
+      customer: customerName || t('calendar.event.defaultCustomer'),
+    }
+  }
+
+  const renderEventContent = (info: any) => {
+    // Extract the title which contains both service and customer name
+    const title = info.event.title
+    const titleParts = title.split(' - ')
+    const { service: serviceName, customer: customerName } = formatEventTitle(
+      titleParts[0],
+      titleParts[1]
+    )
+
+    // Find staff member
+    const staffId = info.event.extendedProps.staffId
+    const staff = mockStaffMembers.find(s => s.id === staffId)
+
+    // Get color for this staff member
+    const colorClass = getStaffColor(staffId)
+
+    // Check if we're in month view
+    const isMonthView = info.view.type === 'dayGridMonth'
+
+    // Render a more compact version for month view
+    if (isMonthView) {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              className={`group h-full w-full rounded-md border-0 py-0.5 px-1.5 text-xs overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md ${colorClass}`}
+            >
+              <div className="truncate font-medium group-hover:text-foreground transition-colors">
+                {customerName}
+              </div>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent
+            side="right"
+            align="start"
+            sideOffset={8}
+            className="p-0 border shadow-lg bg-card"
+          >
+            <div className="p-3">
+              <h3 className="font-semibold text-sm mb-2 text-foreground">
+                {customerName}
+              </h3>
+              <div className="text-xs text-foreground space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-black font-medium">
+                    {t('calendar.service')}:
+                  </span>
+                  <span className="font-medium">{serviceName}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-black font-medium">
+                    {t('calendar.staff')}:
+                  </span>
+                  <span>{staff?.name}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-black font-medium">
+                    {t('calendar.status')}:
+                  </span>
+                  <span
+                    className={`text-xs font-medium status-text-${info.event.extendedProps.status}`}
+                  >
+                    {(() => {
+                      switch (info.event.extendedProps.status) {
+                        case 'confirmed':
+                          return t('calendar.status.confirmed')
+                        case 'pending':
+                          return t('calendar.status.pending')
+                        case 'completed':
+                          return t('calendar.status.completed')
+                        case 'cancelled':
+                          return t('calendar.status.cancelled')
+                        default:
+                          return ''
+                      }
+                    })()}
+                  </span>
+                </div>
+                <div className="mt-2 pt-2 border-t border-border">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-black font-medium">
+                      {t('calendar.time')}:
+                    </span>
+                    <span>
+                      {new Date(info.event.start).toLocaleTimeString(
+                        i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                        {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false,
+                        }
+                      )}{' '}
+                      -{' '}
+                      {new Date(info.event.end).toLocaleTimeString(
+                        i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                        {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false,
+                        }
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      )
+    }
+
+    // Regular view for day and week views
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div
+            className={`group h-full w-full rounded-md border-0 p-2 overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md ${colorClass} status-${info.event.extendedProps.status}`}
+          >
+            <div className="flex items-center gap-1">
+              <div className="font-medium truncate transition-colors">
+                {customerName}
+              </div>
+              <Info className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex items-center gap-1.5 mt-1">
+              <div className="h-1.5 w-1.5 rounded-full bg-primary/70"></div>
+              <div className="text-xs truncate text-black transition-colors">
+                {serviceName}
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30"></div>
+              <div className="text-xs truncate text-black">{staff?.name}</div>
+            </div>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          side="right"
+          align="start"
+          sideOffset={8}
+          className="p-0 border shadow-lg bg-card"
+        >
+          <div className="p-3">
+            <h3 className="font-semibold text-sm mb-2 text-foreground">
+              {customerName}
+            </h3>
+            <div className="text-xs text-foreground space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-black font-medium">
+                  {t('calendar.service')}:
+                </span>
+                <span className="font-medium">{serviceName}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-black font-medium">
+                  {t('calendar.staff')}:
+                </span>
+                <span>{staff?.name}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-black font-medium">
+                  {t('calendar.status')}:
+                </span>
+                <span
+                  className={`text-xs font-medium status-text-${info.event.extendedProps.status}`}
+                >
+                  {(() => {
+                    switch (info.event.extendedProps.status) {
+                      case 'confirmed':
+                        return t('calendar.status.confirmed')
+                      case 'pending':
+                        return t('calendar.status.pending')
+                      case 'completed':
+                        return t('calendar.status.completed')
+                      case 'cancelled':
+                        return t('calendar.status.cancelled')
+                      default:
+                        return ''
+                    }
+                  })()}
+                </span>
+              </div>
+              <div className="mt-2 pt-2 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-black font-medium">
+                    {t('calendar.time')}:
+                  </span>
+                  <span>
+                    {new Date(info.event.start).toLocaleTimeString(
+                      i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                      {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      }
+                    )}{' '}
+                    -{' '}
+                    {new Date(info.event.end).toLocaleTimeString(
+                      i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                      {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      }
+                    )}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    )
+  }
+
+  const getEventClassNames = (info: any) => {
+    const staffId = info.event.extendedProps.staffId
+    const status = info.event.extendedProps.status
+    return [getStaffColor(staffId), `status-${status}`]
   }
 
   return (
@@ -259,29 +502,44 @@ export const StaffCalendarPage = () => {
                     return (
                       <div
                         key={staff.id}
-                        className={`flex items-center justify-between rounded-md border p-2 ${
+                        className={`flex items-center justify-between rounded-md border p-2.5 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer ${
                           selectedStaff.includes(staff.id)
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border'
+                            ? 'border-primary/40 bg-primary/5 shadow-primary/5'
+                            : 'border-border/40 hover:border-border/60'
                         }`}
                         onClick={() => handleStaffChange(staff.id)}
                       >
                         <div className="flex items-center space-x-2">
                           <div
                             className={`h-3 w-3 rounded-full ${
-                              staff.isActive ? 'bg-green-500' : 'bg-red-500'
+                              staff.isActive
+                                ? 'bg-green-500 shadow-sm shadow-green-200 dark:shadow-green-900/20'
+                                : 'bg-red-500 shadow-sm shadow-red-200 dark:shadow-red-900/20'
                             }`}
+                            title={
+                              staff.isActive
+                                ? t('admin.staffCalendar.active')
+                                : t('admin.staffCalendar.inactive')
+                            }
                           />
                           <div className="flex items-center gap-2">
                             <div
                               className={`h-3 w-3 rounded-sm ${bgColor} ${borderColor}`}
                             />
-                            <span>{staff.name}</span>
+                            <span className="font-medium text-sm">
+                              {staff.name}
+                            </span>
                           </div>
                         </div>
-                        <div className="text-xs text-muted-foreground">
-                          {staff.services.length}{' '}
-                          {t('admin.staffCalendar.services')}
+                        <div className="flex items-center gap-1">
+                          <div className="flex items-center justify-center h-5 w-5 rounded-full bg-muted text-[10px] font-medium">
+                            {staff.services.length}
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {t('admin.staffCalendar.servicesCount', {
+                              count: staff.services.length,
+                            })}
+                          </span>
                         </div>
                       </div>
                     )
@@ -289,163 +547,27 @@ export const StaffCalendarPage = () => {
                 </div>
               </div>
               <div className="h-[600px] md:col-span-3">
-                <FullCalendarComponent
+                <FullCalendar
                   ref={calendarRef}
-                  events={filteredBookings}
-                  view={view}
-                  date={date}
+                  plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+                  initialView={view}
                   headerToolbar={false}
                   allDaySlot={false}
+                  locale={i18n.language === 'pt' ? ptLocale : undefined}
+                  events={filteredBookings}
+                  eventContent={renderEventContent}
+                  eventClassNames={getEventClassNames}
+                  nowIndicator={true}
                   slotMinTime="08:00:00"
                   slotMaxTime="20:00:00"
                   slotDuration="00:30:00"
                   height="100%"
-                  locale={i18n.language === 'pt' ? ptLocale : undefined}
-                  firstDay={1} // Start week on Monday
-                  buttonText={{
-                    today: t('calendar.today'),
-                    month: t('calendar.month'),
-                    week: t('calendar.week'),
-                    day: t('calendar.day'),
+                  businessHours={{
+                    daysOfWeek: [1, 2, 3, 4, 5],
+                    startTime: '09:00',
+                    endTime: '18:00',
                   }}
-                  eventTimeFormat={{
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    meridiem: false,
-                    hour12: false,
-                  }}
-                  // Month view specific settings
-                  dayMaxEventRows={3}
-                  dayMaxEvents={3}
-                  moreLinkClick="popover"
-                  moreLinkClassNames="text-xs font-medium text-primary hover:text-primary-dark"
-                  eventContent={(info: any) => {
-                    // Extract the title which contains both service and customer name
-                    const title = info.event.title
-                    const titleParts = title.split(' - ')
-                    const serviceName = titleParts[0]
-                    const customerName = titleParts[1]
-
-                    // Find staff member
-                    const staffId = info.event.extendedProps.staffId
-                    const staff = mockStaffMembers.find(s => s.id === staffId)
-
-                    // Get color for this staff member
-                    const colorClass = getStaffColor(staffId)
-
-                    // Check if we're in month view
-                    const isMonthView = info.view.type === 'dayGridMonth'
-
-                    // Render a more compact version for month view
-                    if (isMonthView) {
-                      return (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div
-                              className={`h-full w-full rounded border py-0 px-1 text-xs overflow-hidden ${colorClass}`}
-                              style={{ fontSize: '0.65rem' }}
-                            >
-                              <div className="truncate font-medium">
-                                {customerName}
-                              </div>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent
-                            side="right"
-                            align="start"
-                            className="p-2 space-y-1"
-                          >
-                            <p className="font-medium">{customerName}</p>
-                            <div className="mt-2">
-                              <p className="text-xs font-medium">
-                                {serviceName}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {staff?.name}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {new Date(info.event.start).toLocaleTimeString(
-                                  i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                                  {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false,
-                                  }
-                                )}{' '}
-                                -{' '}
-                                {new Date(info.event.end).toLocaleTimeString(
-                                  i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                                  {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false,
-                                  }
-                                )}
-                              </p>
-                            </div>
-                          </TooltipContent>
-                        </Tooltip>
-                      )
-                    }
-
-                    // Regular view for day and week views
-                    return (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div
-                            className={`h-full w-full rounded border p-1 overflow-hidden group ${colorClass}`}
-                          >
-                            <div className="flex items-center gap-1">
-                              <div className="font-medium truncate">
-                                {customerName}
-                              </div>
-                              <Info className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </div>
-                            <div className="text-xs truncate">
-                              {serviceName}
-                            </div>
-                            <div className="text-xs truncate">
-                              {staff?.name}
-                            </div>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="right"
-                          align="start"
-                          className="p-2 space-y-1"
-                        >
-                          <p className="font-medium">{customerName}</p>
-                          <div className="mt-2">
-                            <p className="text-xs font-medium">{serviceName}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {staff?.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {new Date(info.event.start).toLocaleTimeString(
-                                i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                                {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                  hour12: false,
-                                }
-                              )}{' '}
-                              -{' '}
-                              {new Date(info.event.end).toLocaleTimeString(
-                                i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                                {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                  hour12: false,
-                                }
-                              )}
-                            </p>
-                          </div>
-                        </TooltipContent>
-                      </Tooltip>
-                    )
-                  }}
-                  // Add custom styling for events
-                  eventClassNames="rounded-md overflow-hidden border shadow-sm"
+                  datesSet={(arg: DatesSetArg) => setDate(new Date(arg.start))}
                 />
               </div>
             </div>

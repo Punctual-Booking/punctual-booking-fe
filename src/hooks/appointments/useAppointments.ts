@@ -13,6 +13,7 @@ import {
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { BUSINESS_ID } from '@/config'
+import { useMemo } from 'react'
 
 // Define the type for appointment creation data
 interface CreateAppointmentData {
@@ -26,8 +27,6 @@ interface CreateAppointmentData {
 export const useAppointments = (userId?: string) => {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
-
-  console.log('useAppointments hook initialized with userId:', userId)
 
   // Query to fetch user appointments
   const {
@@ -44,19 +43,34 @@ export const useAppointments = (userId?: string) => {
         return []
       }
 
-      console.log('Fetching appointments for user:', userId)
+      // Look for cached data first
+      const cachedData = queryClient.getQueryData<AppointmentResponseDto[]>([
+        'appointments',
+        userId,
+      ])
+      if (cachedData?.length) {
+        console.log(
+          'Using cached appointments data:',
+          cachedData.length,
+          'appointments'
+        )
+        return cachedData
+      }
+
       try {
+        console.log('Fetching appointments for user:', userId)
         const result = await getUserAppointments(userId)
-        console.log('Fetched appointments:', result.length)
         return result
       } catch (error) {
-        console.error('Error fetching appointments:', error)
         throw error
       }
     },
     enabled: !!userId,
     retry: 1, // Reduce retries to avoid excessive requests
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 15 * 60 * 1000, // 15 minutes - increase to reduce fetches
+    gcTime: 30 * 60 * 1000, // 30 minutes in cache
+    refetchOnWindowFocus: false, // Disable refetch on window focus
+    refetchOnMount: true, // Only fetch on mount
   })
 
   // Mutation to create a new appointment
@@ -66,8 +80,17 @@ export const useAppointments = (userId?: string) => {
         ...appointmentData,
         businessId: BUSINESS_ID,
       }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appointments'] })
+    onSuccess: newAppointment => {
+      // Update cache directly instead of invalidating query
+      const currentData =
+        queryClient.getQueryData<AppointmentResponseDto[]>([
+          'appointments',
+          userId,
+        ]) || []
+      queryClient.setQueryData(
+        ['appointments', userId],
+        [...currentData, newAppointment]
+      )
       toast.success(t('appointments.createSuccess'))
     },
     onError: (error: Error) => {
@@ -78,15 +101,21 @@ export const useAppointments = (userId?: string) => {
 
   // Mutation to update an appointment
   const updateAppointmentMutation = useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string
-      data: { status: AppointmentStatus }
-    }) => updateAppointment(id, data.status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appointments'] })
+    mutationFn: ({ id, data }: { id: string; data: AppointmentUpdateDto }) =>
+      updateAppointment(id, data),
+    onSuccess: (updatedAppointment, variables) => {
+      // Update cache directly instead of invalidating query
+      const currentData =
+        queryClient.getQueryData<AppointmentResponseDto[]>([
+          'appointments',
+          userId,
+        ]) || []
+      const updatedData = currentData.map(appointment =>
+        appointment.id === variables.id
+          ? { ...appointment, ...updatedAppointment }
+          : appointment
+      )
+      queryClient.setQueryData(['appointments', userId], updatedData)
       toast.success(t('appointments.updateSuccess'))
     },
     onError: (error: Error) => {
@@ -95,23 +124,35 @@ export const useAppointments = (userId?: string) => {
     },
   })
 
-  // Get upcoming appointments
-  const upcomingAppointments = appointments
-    .filter(appointment => new Date(appointment.appointmentTime) > new Date())
-    .sort(
-      (a, b) =>
-        new Date(a.appointmentTime).getTime() -
-        new Date(b.appointmentTime).getTime()
-    )
+  // Get upcoming appointments - memoized
+  const upcomingAppointments = useMemo(
+    () =>
+      appointments
+        .filter(
+          appointment => new Date(appointment.appointmentTime) > new Date()
+        )
+        .sort(
+          (a, b) =>
+            new Date(a.appointmentTime).getTime() -
+            new Date(b.appointmentTime).getTime()
+        ),
+    [appointments]
+  )
 
-  // Get past appointments
-  const pastAppointments = appointments
-    .filter(appointment => new Date(appointment.appointmentTime) <= new Date())
-    .sort(
-      (a, b) =>
-        new Date(b.appointmentTime).getTime() -
-        new Date(a.appointmentTime).getTime()
-    )
+  // Get past appointments - memoized
+  const pastAppointments = useMemo(
+    () =>
+      appointments
+        .filter(
+          appointment => new Date(appointment.appointmentTime) <= new Date()
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.appointmentTime).getTime() -
+            new Date(a.appointmentTime).getTime()
+        ),
+    [appointments]
+  )
 
   // Function to cancel an appointment
   const cancelAppointment = (id: string) => {

@@ -1,56 +1,13 @@
 import { AppointmentResponseDto, AppointmentStatus } from '@/types/appointment'
-import { addDays, addHours, addMinutes, subDays } from 'date-fns'
+import { addDays, addHours, addMinutes, subDays, isSameDay } from 'date-fns'
 import { BUSINESS_ID } from '@/config'
+import { mockStaffData, mockServiceData } from './mockData'
 
-// Mock staff data
-const mockStaff = [
-  {
-    id: '1',
-    name: 'Maria Silva',
-    email: 'maria@example.com',
-    phone: '123-456-789',
-    image: '/images/staff/maria.jpg',
-    specialties: ['Hair Coloring', 'Hair Treatment', 'Styling'],
-    yearsOfExperience: 8,
-    isActive: true,
-    services: [],
-    businessId: BUSINESS_ID,
-  },
-  {
-    id: '2',
-    name: 'João Santos',
-    email: 'joao@example.com',
-    phone: '987-654-321',
-    image: '/images/staff/joao.jpg',
-    specialties: ['Haircut', 'Beard Trim', "Men's Styling"],
-    yearsOfExperience: 5,
-    isActive: true,
-    services: [],
-    businessId: BUSINESS_ID,
-  },
-]
+// Mock staff data from centralized store
+const mockStaff = mockStaffData
 
-// Mock services data
-const mockServices = [
-  {
-    id: '1',
-    name: 'Haircut',
-    description: 'Classic haircut with wash and style',
-    price: 30,
-    duration: 30,
-    image: '/images/services/haircut.jpg',
-    businessId: BUSINESS_ID,
-  },
-  {
-    id: '2',
-    name: 'Hair Coloring',
-    description: 'Full color treatment with professional products',
-    price: 100,
-    duration: 120,
-    image: '/images/services/coloring.jpg',
-    businessId: BUSINESS_ID,
-  },
-]
+// Mock services data from centralized store
+const mockServices = mockServiceData
 
 /**
  * Generates a random appointment
@@ -118,6 +75,64 @@ const generateMockAppointments = (
 
 // Store mock data to simulate persistence
 const mockAppointments: Record<string, AppointmentResponseDto[]> = {}
+
+// Add listener to clear mock data on logout
+if (typeof window !== 'undefined') {
+  window.addEventListener('mock-logout', () => {
+    console.log('Mock: Clearing appointment data on logout')
+    // Clear all mock appointments data
+    Object.keys(mockAppointments).forEach(key => {
+      delete mockAppointments[key]
+    })
+  })
+}
+
+/**
+ * Mock implementation for getting an appointment by ID
+ */
+export const mockGetAppointmentById = async (
+  id: string
+): Promise<AppointmentResponseDto> => {
+  console.log('Mock: Getting appointment by ID', id)
+
+  // Delay to simulate network latency
+  await new Promise(resolve => setTimeout(resolve, 800))
+
+  // Find the appointment in all user appointments
+  let foundAppointment: AppointmentResponseDto | undefined
+
+  Object.keys(mockAppointments).forEach(userId => {
+    const appointment = mockAppointments[userId].find(app => app.id === id)
+    if (appointment) {
+      foundAppointment = appointment
+    }
+  })
+
+  // If we couldn't find the appointment, generate a new one for demo purposes
+  if (!foundAppointment) {
+    console.log(
+      `Appointment with ID ${id} not found, generating a sample appointment for demo`
+    )
+
+    // Generate a random appointment for testing purposes
+    // In a real app, we would return a 404 error
+    const customerId = 'mock-user-id'
+    foundAppointment = generateRandomAppointment(
+      customerId,
+      AppointmentStatus.SCHEDULED,
+      3,
+      { id }
+    )
+
+    // Store this appointment for future reference
+    if (!mockAppointments[customerId]) {
+      mockAppointments[customerId] = []
+    }
+    mockAppointments[customerId].push(foundAppointment)
+  }
+
+  return foundAppointment
+}
 
 /**
  * Mock implementation for getting user appointments
@@ -213,6 +228,17 @@ export const mockCreateAppointment = async (data: {
   // Find the staff and service
   const staff = mockStaff.find(s => s.id === data.staffId)
   const service = mockServices.find(s => s.id === data.serviceId)
+
+  console.log('Searching for staffId:', data.staffId)
+  console.log(
+    'Available mock staff IDs:',
+    mockStaff.map(s => s.id)
+  )
+  console.log('Searching for serviceId:', data.serviceId)
+  console.log(
+    'Available mock service IDs:',
+    mockServices.map(s => s.id)
+  )
 
   if (!staff || !service) {
     throw new Error('Staff or service not found')

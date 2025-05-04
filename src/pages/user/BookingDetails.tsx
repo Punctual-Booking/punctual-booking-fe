@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { format, addDays, startOfDay, isBefore, isAfter } from 'date-fns'
+import { pt, enUS } from 'date-fns/locale'
 import {
   CalendarDays,
   Clock,
@@ -27,8 +28,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Calendar as CalendarComponent } from '@/components/ui/calendar'
-import { AppointmentStatus } from '@/types/appointment'
+import { AppointmentStatus, AppointmentUpdateDto } from '@/types/appointment'
 import { useAppointments } from '@/hooks/appointments/useAppointments'
+import { useAppointment } from '@/hooks/appointments/useAppointment'
 import { useAuth } from '@/hooks/auth'
 
 // Mock available time slots
@@ -65,17 +67,15 @@ const generateTimeSlots = (date: Date) => {
 const BookingDetails = () => {
   const { id } = useParams({ from: '/booking-details/$id' })
   const navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { user } = useAuth()
-  const {
-    appointments,
-    isLoading,
-    updateAppointment,
-    cancelAppointment,
-    isUpdating,
-  } = useAppointments(user?.id)
+  const { updateAppointment, cancelAppointment, isUpdating } = useAppointments(
+    user?.id
+  )
 
-  const [booking, setBooking] = useState<any>(null)
+  // Use the new hook to fetch a single appointment by ID
+  const { appointment: booking, isLoading, isError, error } = useAppointment(id)
+
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [showRescheduleDialog, setShowRescheduleDialog] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
@@ -85,14 +85,8 @@ const BookingDetails = () => {
   >([])
   const [rescheduleStep, setRescheduleStep] = useState<'date' | 'time'>('date')
 
-  useEffect(() => {
-    if (id && appointments.length > 0) {
-      const foundBooking = appointments.find(
-        appointment => appointment.id === id
-      )
-      setBooking(foundBooking || null)
-    }
-  }, [id, appointments])
+  // Get the current locale for date formatting
+  const currentLocale = i18n.language === 'pt' ? pt : enUS
 
   // Generate time slots when a date is selected
   useEffect(() => {
@@ -101,6 +95,18 @@ const BookingDetails = () => {
       setSelectedTime(undefined)
     }
   }, [selectedDate])
+
+  // Log errors if any
+  useEffect(() => {
+    if (isError && error) {
+      console.error('Error fetching booking details:', error)
+    }
+  }, [isError, error])
+
+  // Function to format dates according to the current locale
+  const formatDate = (date: Date | string, formatStr: string) => {
+    return format(new Date(date), formatStr, { locale: currentLocale })
+  }
 
   const getStatusColor = (status: AppointmentStatus) => {
     switch (status) {
@@ -265,7 +271,7 @@ const BookingDetails = () => {
             <Clock className="h-4 w-4" />
             <span>
               {t('booking.details.created')}:{' '}
-              {format(new Date(booking.createdAt), 'PPp')}
+              {formatDate(booking.createdAt, 'PPp')}
             </span>
           </div>
         </CardContent>
@@ -303,13 +309,13 @@ const BookingDetails = () => {
             <h3 className="font-medium">{t('booking.details.dateAndTime')}</h3>
             <div className="flex items-center gap-2 text-sm">
               <CalendarDays className="h-4 w-4 text-muted-foreground" />
-              <span>{format(new Date(booking.startTime), 'PPP')}</span>
+              <span>{formatDate(booking.startTime, 'PPP')}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <span>
-                {format(new Date(booking.startTime), 'p')} -{' '}
-                {format(new Date(booking.endTime), 'p')}
+                {formatDate(booking.startTime, 'p')} -{' '}
+                {formatDate(booking.endTime, 'p')}
               </span>
             </div>
           </div>
@@ -415,13 +421,13 @@ const BookingDetails = () => {
               <div className="mt-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <CalendarDays className="h-4 w-4" />
-                  <span>{format(new Date(booking.startTime), 'PPP')}</span>
+                  <span>{formatDate(booking.startTime, 'PPP')}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
                   <Clock className="h-4 w-4" />
                   <span>
-                    {format(new Date(booking.startTime), 'p')} -{' '}
-                    {format(new Date(booking.endTime), 'p')}
+                    {formatDate(booking.startTime, 'p')} -{' '}
+                    {formatDate(booking.endTime, 'p')}
                   </span>
                 </div>
               </div>
@@ -494,7 +500,7 @@ const BookingDetails = () => {
                   {t('booking.backToDate')}
                 </Button>
                 <h3 className="font-medium">
-                  {selectedDate && format(selectedDate, 'PPP')}
+                  {selectedDate && formatDate(selectedDate, 'PPP')}
                 </h3>
               </div>
 
@@ -514,7 +520,7 @@ const BookingDetails = () => {
                     className={`${!slot.available ? 'opacity-50' : ''}`}
                     onClick={() => handleTimeSelect(slot.time)}
                   >
-                    {format(slot.time, 'p')}
+                    {formatDate(slot.time, 'p')}
                   </Button>
                 ))}
               </div>
@@ -527,11 +533,11 @@ const BookingDetails = () => {
                   <div className="mt-2 space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                      <span>{format(selectedDate!, 'PPP')}</span>
+                      <span>{formatDate(selectedDate!, 'PPP')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span>{format(selectedTime, 'p')}</span>
+                      <span>{formatDate(selectedTime, 'p')}</span>
                     </div>
                   </div>
                 </div>

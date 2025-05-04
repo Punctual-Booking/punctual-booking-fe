@@ -87,7 +87,6 @@ export const ServiceModal = ({ open, onClose, service }: ServiceModalProps) => {
 
       // TODO: Replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
-      console.log('Save service:', formattedData)
       reset()
       onClose()
     } catch (error) {

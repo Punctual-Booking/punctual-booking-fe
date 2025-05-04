@@ -69,7 +69,7 @@
 
 /* Calendar Container */
 .fc {
-  @apply h-full bg-background text-foreground flex flex-col;
+  @apply h-full bg-background text-foreground flex flex-col rounded-lg overflow-hidden shadow-sm border border-border/40;
 }
 
 /* Time grid container */
@@ -78,26 +78,26 @@
 }
 
 .fc .fc-timegrid-container {
-  @apply h-full overflow-y-auto overflow-x-hidden;
+  @apply h-full overflow-y-auto overflow-x-hidden scroll-smooth;
 }
 
 /* Sticky header */
 .fc .fc-col-header {
-  @apply sticky top-0 z-10 bg-background border-b;
+  @apply sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b;
 }
 
 /* Time grid */
 .fc .fc-timegrid-slot {
-  @apply h-12; /* Adjust time slot height */
+  @apply h-14; /* Taller time slots for better spacing */
 }
 
-.fc .fc-timegrid-slot-minor {
-  @apply border-b border-dashed border-border;
+.fc .fc-timegrid-slot-lane.fc-timegrid-slot-minor {
+  @apply border-t border-dashed border-border/60;
 }
 
 /* Time column */
 .fc .fc-timegrid-axis {
-  @apply border-2 bg-background;
+  @apply border-r border-border/60 bg-background/70 backdrop-blur-sm;
 }
 
 .fc .fc-timegrid-axis-cushion {
@@ -108,8 +108,12 @@
   @apply text-xs font-medium text-muted-foreground border-0;
 }
 
+.fc .fc-timegrid-slot-minor {
+  @apply border-t-0 border-r;
+}
+
 .fc .fc-timegrid-axis-frame {
-  @apply h-[48px] flex items-center justify-center;
+  @apply h-[56px] flex items-center justify-center;
 }
 
 .fc .fc-timegrid-slot-label-cushion {
@@ -126,7 +130,7 @@
 
 /* Header Toolbar */
 .fc .fc-toolbar {
-  @apply mb-4 flex items-center justify-between gap-4 px-4 py-3 border-b sticky top-0 bg-background z-20;
+  @apply mb-4 flex items-center justify-between gap-4 px-6 py-4 border-b sticky top-0 bg-background/95 backdrop-blur-sm z-20;
 }
 
 .fc .fc-toolbar-title {
@@ -135,65 +139,63 @@
 
 /* Navigation Buttons Group */
 .fc .fc-button-group {
-  @apply inline-flex items-center rounded-lg bg-background shadow-sm border;
+  @apply inline-flex items-center rounded-md bg-background shadow-sm border overflow-hidden;
 }
 
 .fc .fc-button-primary {
-  @apply px-3 py-2 text-sm font-medium transition-colors hover:bg-accent/50 border-0 text-foreground;
+  @apply px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground border-0 text-foreground;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active {
-  @apply bg-primary/10 text-primary hover:bg-primary/20;
-}
-
-/* Time Grid */
-.fc .fc-timegrid {
-  @apply border-0 shadow-sm rounded-lg bg-background;
-}
-
-.fc .fc-timegrid-axis-cushion {
-  @apply text-xs font-medium text-muted-foreground;
-}
-
-/* Today Column */
-.fc .fc-day-today {
-  @apply bg-accent/5;
+  @apply bg-primary/10 text-primary hover:bg-primary/20 font-medium;
 }
 
 /* Current Time Indicator */
 .fc .fc-timegrid-now-indicator-line {
-  @apply border-primary;
+  @apply border-2 border-primary/80 z-10;
 }
 
 .fc .fc-timegrid-now-indicator-arrow {
-  @apply border-primary;
+  @apply border-primary/80 z-10;
 }
 
-/* Week Numbers */
-.fc .fc-timegrid-axis {
-  @apply border-2 bg-background;
+/* Month view specific enhancements */
+.fc .fc-daygrid-day.fc-day-today {
+  @apply bg-primary/5;
 }
 
-/* Events */
+.fc .fc-daygrid-day-top {
+  @apply pt-1 pr-2;
+}
+
+.fc .fc-daygrid-day-number {
+  @apply text-sm font-medium text-foreground/80 hover:text-foreground transition-colors;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+  @apply text-primary font-semibold;
+}
+
+.fc .fc-daygrid-day-events {
+  @apply pt-1 pb-1 px-1;
+}
+
+.fc .fc-daygrid-more-link {
+  @apply text-xs font-medium text-primary hover:text-primary-foreground hover:bg-primary/10 transition-colors rounded px-1;
+}
+
+/* Tooltip theme */
+.tippy-box[data-theme~='custom'] {
+  @apply bg-popover text-popover-foreground border border-border/60 rounded-md shadow-md;
+}
+
+.tippy-box[data-theme~='custom'] .tippy-arrow {
+  @apply text-popover;
+}
+
+/* Original event styles */
 .fc .fc-event {
-  @apply border border-border bg-card hover:bg-accent/50 hover:scale-[1.02] hover:shadow-md transition-all cursor-pointer;
-}
-
-.fc .fc-event-main {
-  @apply p-2;
-}
-
-.fc .fc-event-title {
-  @apply text-sm font-medium text-foreground;
-}
-
-.fc .fc-event-time {
-  @apply hidden;
-  /* @apply text-xs font-medium text-foreground/70; */
-}
-
-.fc .fc-event-description {
-  @apply text-xs text-foreground/60;
+  @apply border border-border/60 bg-card rounded-md hover:bg-accent/30 transition-all duration-200 cursor-pointer;
 }
 
 /* Event colors by status */
@@ -210,58 +212,20 @@
 }
 
 .fc .fc-event.status-cancelled {
-  @apply border-l-4 border-l-destructive opacity-50;
+  @apply border-l-4 border-l-destructive/70 opacity-60;
 }
 
-.fc .fc-event.status-no-show {
-  @apply bg-red-600 text-white;
+/* Ensure tooltips work properly */
+.fc .fc-event {
+  z-index: 5;
 }
 
-/* Column Headers */
-.fc .fc-col-header-cell {
-  @apply border-2 bg-background py-3;
+.tippy-box {
+  z-index: 9999 !important;
 }
 
-.fc .fc-col-header-cell-cushion {
-  @apply text-sm font-medium text-muted-foreground;
-}
-
-.fc .fc-day-today .fc-col-header-cell-cushion {
-  @apply text-sm font-medium text-foreground;
-}
-
-.status-pending {
-  @apply border-l-4 border-l-yellow-500;
-}
-
-.status-confirmed {
-  @apply border-l-4 border-l-green-500;
-}
-
-.status-completed {
-  @apply border-l-4 border-l-blue-500;
-}
-
-.status-cancelled {
-  @apply border-l-4 border-l-destructive opacity-50;
-}
-
-/* Tooltip theme */
-.tippy-box[data-theme~='custom'] {
-  @apply bg-popover text-popover-foreground border border-border rounded-md shadow-md;
-}
-
-.tippy-box[data-theme~='custom'] .tippy-arrow {
-  @apply text-popover;
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+.fc thead .fc-scroller {
+  overflow: hidden !important;
 }
 
 /* Mobile responsive styles for FullCalendar */
@@ -333,4 +297,69 @@
       @apply mt-2;
     }
   }
+
+  .tippy-box {
+    max-width: 250px !important;
+  }
+}
+
+/* Tooltip theme for the calendar */
+.tippy-box {
+  @apply bg-card text-card-foreground border border-border/80 shadow-md rounded-md z-50;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.15);
+}
+
+.tippy-box .tippy-content {
+  @apply p-3;
+}
+
+.tippy-box .tippy-arrow {
+  @apply text-card;
+}
+
+/* Fix tooltip arrow */
+.tippy-box[data-placement^='right'] .tippy-arrow {
+  left: -7px;
+}
+
+/* Improved tooltip headings */
+.calendar-tooltip-title {
+  @apply text-base font-semibold mb-2;
+}
+
+/* Tooltip content with better contrast */
+.calendar-tooltip-content {
+  @apply text-sm space-y-2;
+}
+
+/* Tooltip labels */
+.calendar-tooltip-label {
+  @apply text-muted-foreground font-medium;
+}
+
+/* Ensure tooltip is above other elements */
+.fc .fc-event {
+  @apply z-10;
+}
+
+/* Ensure tooltips are visible in all contexts */
+.tooltip-container {
+  @apply z-50;
+}
+
+/* Status text colors */
+.status-text-confirmed {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.status-text-pending {
+  @apply text-amber-600 dark:text-amber-400;
+}
+
+.status-text-completed {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.status-text-cancelled {
+  @apply text-red-600 dark:text-red-400;
 }

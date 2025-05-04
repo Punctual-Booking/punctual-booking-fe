@@ -2,7 +2,6 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  Outlet,
   redirect,
 } from '@tanstack/react-router'
 import { LoginPage } from '@/pages/LoginPage'
@@ -15,6 +14,7 @@ import { AdminDashboard } from '@/pages/admin/Dashboard'
 import { Loading } from '@/components/ui/loading'
 import { lazy, Suspense } from 'react'
 import { queryClient } from '@/lib/queryClient'
+import App from './App'
 
 // Admin pages
 const AdminServicesPage = lazy(() => import('@/pages/admin/Services'))
@@ -36,15 +36,38 @@ const BookingDetails = lazy(() => import('@/pages/user/BookingDetails'))
 const AppointmentTest = lazy(() => import('@/pages/AppointmentTest'))
 
 // Helper function to check auth state from the query cache
-const getAuthState = () => {
-  const user = queryClient.getQueryData<User>(['user'])
+// This now reads from React Query cache and will directly check localStorage and getCurrentUser if needed
+const getAuthState = async (): Promise<{
+  isAuthenticated: boolean
+  user: User | undefined
+}> => {
+  // First try to get user from the React Query cache
+  let user = queryClient.getQueryData<User>(['user'])
+
+  // If no user in cache but token exists, we need to fetch user data
+  if (!user && localStorage.getItem('access_token')) {
+    try {
+      // Import the getCurrentUser function dynamically to avoid circular dependencies
+      const { getCurrentUser } = await import('@/services/auth/me')
+      const userData = await getCurrentUser()
+
+      // Update the cache with the user data
+      if (userData) {
+        queryClient.setQueryData(['user'], userData)
+        user = userData
+      }
+    } catch (error) {
+      console.error('getAuthState - Error fetching user data:', error)
+    }
+  }
+
   const isAuthenticated = !!user
   return { isAuthenticated, user }
 }
 
 // Create root route
 const rootRoute = createRootRoute({
-  component: () => <Outlet />,
+  component: App,
 })
 
 // Auth routes
@@ -52,10 +75,9 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: LoginPage,
-  beforeLoad: () => {
-    const { isAuthenticated, user } = getAuthState()
-    console.log('isAuthenticated', isAuthenticated)
-    console.log('user', user)
+  beforeLoad: async () => {
+    const { isAuthenticated, user } = await getAuthState()
+
     if (isAuthenticated) {
       if (user?.role === UserRole.CUSTOMER) {
         throw redirect({ to: '/user/dashboard' })
@@ -65,6 +87,7 @@ const indexRoute = createRoute({
       ) {
         throw redirect({ to: '/admin/dashboard' })
       }
+    } else {
     }
     return {}
   },
@@ -74,8 +97,8 @@ const registerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/register',
   component: RegisterPage,
-  beforeLoad: () => {
-    const { isAuthenticated, user } = getAuthState()
+  beforeLoad: async () => {
+    const { isAuthenticated, user } = await getAuthState()
     if (isAuthenticated) {
       if (user?.role === UserRole.CUSTOMER) {
         throw redirect({ to: '/user/dashboard' })
@@ -106,8 +129,8 @@ const adminLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admin',
   component: AdminLayout,
-  beforeLoad: () => {
-    const { isAuthenticated, user } = getAuthState()
+  beforeLoad: async () => {
+    const { isAuthenticated, user } = await getAuthState()
     if (
       !isAuthenticated ||
       !(user?.role === UserRole.ADMIN || user?.role === UserRole.STAFF)
@@ -142,10 +165,10 @@ const adminServicesRoute = createRoute({
       <AdminServicesPage />
     </Suspense>
   ),
-  beforeLoad: () => {
-    const { user } = getAuthState()
+  beforeLoad: async () => {
+    const { user } = await getAuthState()
     if (user?.role !== UserRole.ADMIN) {
-      throw redirect({ to: '/admin' })
+      throw redirect({ to: '/admin/dashboard' })
     }
     return {}
   },
@@ -159,10 +182,10 @@ const adminStaffRoute = createRoute({
       <StaffPage />
     </Suspense>
   ),
-  beforeLoad: () => {
-    const { user } = getAuthState()
+  beforeLoad: async () => {
+    const { user } = await getAuthState()
     if (user?.role !== UserRole.ADMIN) {
-      throw redirect({ to: '/admin' })
+      throw redirect({ to: '/admin/dashboard' })
     }
     return {}
   },
@@ -176,10 +199,10 @@ const adminStaffCalendarRoute = createRoute({
       <StaffCalendarPage />
     </Suspense>
   ),
-  beforeLoad: () => {
-    const { user } = getAuthState()
+  beforeLoad: async () => {
+    const { user } = await getAuthState()
     if (user?.role !== UserRole.ADMIN) {
-      throw redirect({ to: '/admin' })
+      throw redirect({ to: '/admin/dashboard' })
     }
     return {}
   },
@@ -193,10 +216,10 @@ const adminSettingsRoute = createRoute({
       <SettingsPage />
     </Suspense>
   ),
-  beforeLoad: () => {
-    const { user } = getAuthState()
+  beforeLoad: async () => {
+    const { user } = await getAuthState()
     if (user?.role !== UserRole.ADMIN) {
-      throw redirect({ to: '/admin' })
+      throw redirect({ to: '/admin/dashboard' })
     }
     return {}
   },
@@ -210,10 +233,10 @@ const adminBookingsRoute = createRoute({
       <BookingsPage />
     </Suspense>
   ),
-  beforeLoad: () => {
-    const { user } = getAuthState()
+  beforeLoad: async () => {
+    const { user } = await getAuthState()
     if (user?.role !== UserRole.ADMIN) {
-      throw redirect({ to: '/admin' })
+      throw redirect({ to: '/admin/dashboard' })
     }
     return {}
   },
@@ -224,8 +247,8 @@ const customerLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/user',
   component: CustomerLayout,
-  beforeLoad: () => {
-    const { isAuthenticated, user } = getAuthState()
+  beforeLoad: async () => {
+    const { isAuthenticated, user } = await getAuthState()
     if (!isAuthenticated || user?.role !== UserRole.CUSTOMER) {
       throw redirect({ to: '/' })
     }
@@ -243,22 +266,22 @@ const customerDashboardRoute = createRoute({
   ),
 })
 
-const customerServicesRoute = createRoute({
-  getParentRoute: () => customerLayoutRoute,
-  path: '/services',
-  component: () => (
-    <Suspense fallback={<Loading centered />}>
-      <ServicesPage />
-    </Suspense>
-  ),
-})
-
 const customerStaffSelectionRoute = createRoute({
   getParentRoute: () => customerLayoutRoute,
   path: '/staff-selection',
   component: () => (
     <Suspense fallback={<Loading centered />}>
       <StaffSelectionPage />
+    </Suspense>
+  ),
+})
+
+const customerServicesRoute = createRoute({
+  getParentRoute: () => customerLayoutRoute,
+  path: '/services',
+  component: () => (
+    <Suspense fallback={<Loading centered />}>
+      <ServicesPage />
     </Suspense>
   ),
 })
@@ -305,8 +328,8 @@ const bookingDetailsRoute = createRoute({
       </Suspense>
     )
   },
-  beforeLoad: () => {
-    const { isAuthenticated, user } = getAuthState()
+  beforeLoad: async () => {
+    const { isAuthenticated, user } = await getAuthState()
     if (!isAuthenticated || user?.role !== UserRole.CUSTOMER) {
       throw redirect({ to: '/' })
     }
@@ -330,8 +353,8 @@ const routeTree = rootRoute.addChildren([
   ]),
   customerLayoutRoute.addChildren([
     customerDashboardRoute,
-    customerServicesRoute,
     customerStaffSelectionRoute,
+    customerServicesRoute,
     customerBookingRoute,
     customerConfirmationRoute,
     customerBookingSuccessRoute,

@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { format } from 'date-fns'
-import { CalendarDays, Clock, Scissors, User } from 'lucide-react'
+import { CalendarDays, Clock, Scissors } from 'lucide-react'
 import { useAuth } from '@/hooks/auth'
 import { useAppointments } from '@/hooks/appointments/useAppointments'
 import { Textarea } from '@/components/ui/textarea'
 import { Loading } from '@/components/ui/loading'
-import { BUSINESS_ID } from '@/config'
+import { StaffAvatar } from '@/components/ui/staff-avatar'
 
 export const ConfirmationPage = () => {
   const { t } = useTranslation()
@@ -77,44 +77,56 @@ export const ConfirmationPage = () => {
           <CardTitle>{t('confirmation.bookingDetails')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="flex items-center gap-3">
-              <Scissors className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="font-medium">{selectedService?.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {t('common.currency', { value: selectedService?.price })}
-                </p>
+          {/* Booking Summary */}
+          <div className="p-4 border rounded-md bg-muted/30">
+            <p className="font-medium mb-3">{t('booking.summary')}</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {/* Selected Staff */}
+              <div className="flex items-center gap-3">
+                <StaffAvatar
+                  src={selectedStaff?.image}
+                  name={selectedStaff?.name || ''}
+                  size="sm"
+                />
+                <div>
+                  <p className="font-medium">{selectedStaff?.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('staff.experience', {
+                      years: selectedStaff?.yearsOfExperience,
+                    })}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-3">
-              <User className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="font-medium">{selectedStaff?.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {t('staff.experience', {
-                    years: selectedStaff?.yearsOfExperience,
-                  })}
-                </p>
+              {/* Selected Service */}
+              <div className="flex items-center gap-3">
+                <Scissors className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">{selectedService?.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('common.currency', { value: selectedService?.price })}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-3">
-              <CalendarDays className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="font-medium">
-                  {format(appointmentTime, 'EEEE, MMMM d, yyyy')}
-                </p>
+              {/* Date */}
+              <div className="flex items-center gap-3">
+                <CalendarDays className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">
+                    {format(appointmentTime, 'EEEE, MMMM d, yyyy')}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-3">
-              <Clock className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="font-medium">
-                  {format(appointmentTime, 'HH:mm')}
-                </p>
+              {/* Time */}
+              <div className="flex items-center gap-3">
+                <Clock className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">
+                    {format(appointmentTime, 'HH:mm')}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

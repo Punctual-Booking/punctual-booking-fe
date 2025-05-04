@@ -11,17 +11,18 @@ i18n
     fallbackLng: 'en',
     supportedLngs: ['en', 'pt'],
     debug: import.meta.env.DEV,
-    
+
     interpolation: {
       escapeValue: false,
     },
-    
+
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    
+
     defaultNS: 'common',
     ns: ['common'],
+    returnObjects: true,
   })
 
 export default i18n

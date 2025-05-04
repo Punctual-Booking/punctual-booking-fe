@@ -113,8 +113,8 @@ export const RegisterForm = () => {
         {...register('passwordConfirmation')}
       />
       {error && (
-        <div className="rounded-md bg-destructive/10 p-3">
-          <p className="text-sm font-medium text-destructive">
+        <div className="rounded-md bg-destructive/15 dark:bg-destructive/25 p-3 border border-destructive/30 dark:border-destructive/40">
+          <p className="text-sm font-medium text-destructive dark:text-red-400">
             {getErrorMessage(error)}
           </p>
         </div>

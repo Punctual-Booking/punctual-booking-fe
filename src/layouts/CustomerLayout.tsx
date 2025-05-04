@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Outlet } from '@tanstack/react-router'
 import { Header } from '@/components/customer/Header'
 
@@ -5,7 +6,10 @@ interface CustomerLayoutProps {
   children?: React.ReactNode
 }
 
-export const CustomerLayout = ({ children }: CustomerLayoutProps) => {
+/**
+ * CustomerLayout component - memoized to prevent unnecessary rerenders
+ */
+export const CustomerLayout = memo(({ children }: CustomerLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -14,4 +18,4 @@ export const CustomerLayout = ({ children }: CustomerLayoutProps) => {
       </main>
     </div>
   )
-}
+})

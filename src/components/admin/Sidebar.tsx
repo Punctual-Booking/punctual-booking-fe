@@ -56,7 +56,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     {
       label: t('admin.sidebar.dashboard'),
       icon: LayoutDashboard,
-      href: '/admin',
+      href: '/admin/dashboard',
     },
     {
       label: t('admin.sidebar.bookings'),
@@ -99,7 +99,11 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   )
 
   const isActive = (href: string) => {
-    if (href === '/admin' && activePath === '/admin/') {
+    // Check if it's the dashboard route
+    if (
+      href === '/admin/dashboard' &&
+      (activePath === '/admin/' || activePath === '/admin')
+    ) {
       return true
     }
     return activePath === href
@@ -126,7 +130,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => {
-              router.navigate({ to: '/admin' })
+              router.navigate({ to: '/admin/dashboard' })
               onClose()
             }}
           >

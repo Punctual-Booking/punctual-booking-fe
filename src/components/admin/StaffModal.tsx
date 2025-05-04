@@ -119,7 +119,6 @@ export const StaffModal = ({ open, onClose, staff }: StaffModalProps) => {
 
       // TODO: Replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('Save staff:', formattedData)
       reset()
       onClose()
     } catch (error) {

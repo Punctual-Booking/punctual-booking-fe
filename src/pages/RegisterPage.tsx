@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card'
 import { RegisterForm } from '@/components/auth/RegisterForm'
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
+import { ThemeSwitcher } from '@/components/common/ThemeSwitcher'
 import { Image } from '@/components/ui/image'
 import logo from '@/assets/images/homepage_logo.png'
 
@@ -17,7 +18,10 @@ export const RegisterPage = () => {
 
   return (
     <div className="container relative mx-auto flex min-h-screen flex-col items-center justify-center px-4">
-      <LanguageSwitcher className="fixed right-4 top-4" />
+      <div className="fixed right-4 top-4 flex items-center gap-2">
+        <ThemeSwitcher />
+        <LanguageSwitcher />
+      </div>
       <Image
         src={logo}
         alt="Punctual Logo"

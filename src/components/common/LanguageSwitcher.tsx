@@ -1,18 +1,24 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { memo, useCallback } from 'react'
 
 interface LanguageSwitcherProps {
   className?: string
 }
 
-export const LanguageSwitcher = ({ className }: LanguageSwitcherProps) => {
+/**
+ * LanguageSwitcher component - allows users to toggle between languages
+ * Memoized to prevent unnecessary rerenders
+ */
+export const LanguageSwitcher = memo(({ className }: LanguageSwitcherProps) => {
   const { i18n } = useTranslation()
 
-  const toggleLanguage = () => {
+  // Memoize the toggle handler
+  const toggleLanguage = useCallback(() => {
     const newLang = i18n.language === 'en' ? 'pt' : 'en'
     i18n.changeLanguage(newLang)
-  }
+  }, [i18n])
 
   return (
     <Button
@@ -32,4 +38,4 @@ export const LanguageSwitcher = ({ className }: LanguageSwitcherProps) => {
       )}
     </Button>
   )
-}
+})

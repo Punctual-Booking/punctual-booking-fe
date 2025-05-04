@@ -13,8 +13,12 @@ export const useLogout = () => {
       // Clear user data from the query cache
       queryClient.setQueryData(['user'], null)
 
-      // Invalidate all queries that might depend on auth status
-      queryClient.invalidateQueries({ queryKey: ['user'] })
+      // Clear appointments data
+      queryClient.setQueryData(['appointments'], [])
+      queryClient.setQueryData(['appointment'], null)
+
+      // Reset all query cache to ensure no stale data persists across sessions
+      queryClient.clear()
     },
   })
 }

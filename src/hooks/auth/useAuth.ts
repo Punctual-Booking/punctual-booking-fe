@@ -101,7 +101,19 @@ export const useAuth = () => {
     logout: async () => {
       try {
         useAuthStore.setState({ isLoading: true, error: null })
+
+        // Clear any stored component state
+        localStorage.removeItem('appointmentData')
+
+        // Execute the logout mutation
         await logoutMutation.mutateAsync()
+
+        // Reload the page after logout to ensure all state is cleared
+        // This is a simple but effective way to ensure no stale data remains
+        if (typeof window !== 'undefined') {
+          window.location.href = '/'
+        }
+
         return true
       } catch (error) {
         if (error instanceof Error) {

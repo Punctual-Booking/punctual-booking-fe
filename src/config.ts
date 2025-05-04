@@ -7,6 +7,8 @@ export const BUSINESS_ID =
 export const FEATURES = {
   MOCK_AUTH: import.meta.env.VITE_MOCK_AUTH === 'true' || true,
   MOCK_APPOINTMENTS: import.meta.env.VITE_MOCK_APPOINTMENTS === 'true' || true,
+  MOCK_STAFF: import.meta.env.VITE_MOCK_STAFF === 'true' || true,
+  MOCK_SERVICES: import.meta.env.VITE_MOCK_SERVICES === 'true' || true,
 }
 
 // Application settings

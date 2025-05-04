@@ -57,6 +57,7 @@
     "continueWithApple": "Continue with Apple",
     "continueWithFacebook": "Continue with Facebook",
     "orContinueWith": "or continue with",
+    "forgotPassword": "Forgot password?",
     "errors": {
       "usernameExists": "This email is already registered.",
       "registrationFailed": "Registration failed. Please try again.",
@@ -248,17 +249,12 @@
     },
     "staffCalendar": {
       "title": "Staff Calendar",
-      "viewAll": "View All Staff",
+      "viewAll": "View All",
       "clearSelection": "Clear Selection",
-      "selectStaff": "Select Staff Members",
-      "services": "services",
-      "noBookings": "No bookings to display",
-      "filterByStaff": "Filter by Staff",
-      "bookingDetails": "Booking Details",
-      "customer": "Customer",
-      "service": "Service",
-      "time": "Time",
-      "duration": "Duration"
+      "selectStaff": "Select Staff",
+      "active": "Active",
+      "inactive": "Inactive",
+      "servicesCount": "{{count}} services"
     }
   },
   "calendar": {
@@ -270,26 +266,59 @@
     "next": "Next",
     "noEventsToDisplay": "No events to display",
     "allDay": "All day",
-    "more": "more"
+    "more": "more",
+    "service": "Service",
+    "staff": "Staff",
+    "status": "Status",
+    "time": "Time",
+    "event": {
+      "defaultService": "Unspecified Service",
+      "defaultCustomer": "Unspecified Customer"
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
   },
   "services": {
-    "title": "Our Services",
-    "description": "Choose from our range of professional services",
-    "duration": "{{duration}} minutes",
-    "select": "Select Service",
-    "price": "${price}",
+    "title": "Services",
+    "description": "Choose a service for your appointment",
+    "select": "Select this service",
+    "selected": "Selected Service",
     "loading": "Loading services...",
-    "selected": "Selected Service"
+    "noServicesAvailable": "No services are available for the selected staff member"
   },
   "staff": {
-    "title": "Choose Your Stylist",
-    "description": "Select a stylist for your appointment",
-    "select": "Choose Stylist",
-    "availability": "Check Availability",
-    "experience": "{{years}} years experience",
+    "title": "Staff Management",
+    "addStaff": "Add Staff",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "phone": "Phone",
     "specialties": "Specialties",
+    "services": "Services",
+    "experience": "Experience",
+    "years": "years",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "isActive": "Active Status",
+    "actions": "Actions",
+    "namePlaceholder": "Enter name",
+    "emailPlaceholder": "Enter email",
+    "phonePlaceholder": "Enter phone number",
+    "specialtiesPlaceholder": "Enter specialties (e.g. Hair, Makeup, Nails)",
+    "servicesPlaceholder": "Enter services (e.g. Haircut, Styling, Manicure)",
+    "separateWithCommas": "Separate multiple items with commas",
+    "selectRole": "Select a role",
+    "selected": "Selected Staff",
     "loading": "Loading staff members...",
-    "noStaffAvailable": "No staff members are available for this service. Please select a different service."
+    "description": "Choose a staff member for your appointment",
+    "selectDescription": "Select a stylist you'd like to work with",
+    "noStaffAvailable": "No staff members are currently available",
+    "select": "Select this staff member"
   },
   "booking": {
     "title": "Choose Date & Time",
@@ -300,6 +329,7 @@
     "unavailable": "Unavailable",
     "next": "Continue to Confirmation",
     "backToDate": "Back to Date Selection",
+    "summary": "Booking Summary",
     "status": {
       "pending": "Pending",
       "confirmed": "Confirmed",
@@ -358,7 +388,7 @@
   "customer": {
     "dashboard": {
       "title": "My Appointments",
-      "bookNew": "Book New Appointment",
+      "bookNew": "Book Appointment",
       "nextAppointment": "Next Appointment",
       "upcomingAppointments": "Upcoming Appointments",
       "pastAppointments": "Past Appointments",
@@ -376,6 +406,12 @@
     "cancelError": "Failed to cancel appointment",
     "rescheduleSuccess": "Appointment rescheduled successfully",
     "rescheduleError": "Failed to reschedule appointment",
-    "fetchError": "Failed to load appointments"
+    "fetchError": "Failed to load appointments",
+    "loading": "Loading appointments..."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "bookAppointment": "Book Appointment",
+    "book": "Book"
   }
 }
