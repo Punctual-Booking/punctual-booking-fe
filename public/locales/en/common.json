@@ -269,17 +269,17 @@
     "more": "more",
     "service": "Service",
     "staff": "Staff",
-    "status": "Status",
-    "time": "Time",
-    "event": {
-      "defaultService": "Unspecified Service",
-      "defaultCustomer": "Unspecified Customer"
-    },
     "status": {
+      "label": "Status",
       "confirmed": "Confirmed",
       "pending": "Pending",
       "completed": "Completed",
       "cancelled": "Cancelled"
+    },
+    "time": "Time",
+    "event": {
+      "defaultService": "Service",
+      "defaultCustomer": "Customer"
     }
   },
   "services": {

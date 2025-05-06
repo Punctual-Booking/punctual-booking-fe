@@ -128,6 +128,17 @@ const getStaffColor = (staffId: string) => {
   return staffColors[staffIndex % staffColors.length]
 }
 
+// Helper function to safely get status as string
+const getStatusAsString = (status: any): string => {
+  if (typeof status === 'string') {
+    return status
+  }
+  if (status && typeof status === 'object') {
+    return 'default'
+  }
+  return 'default'
+}
+
 export const StaffCalendarPage = () => {
   const { t, i18n } = useTranslation()
   const [view, setView] = useState('timeGridDay')
@@ -214,6 +225,9 @@ export const StaffCalendarPage = () => {
   }
 
   const renderEventContent = (info: any) => {
+    // Get status safely
+    const statusString = getStatusAsString(info.event.extendedProps.status)
+
     // Extract the title which contains both service and customer name
     const title = info.event.title
     const titleParts = title.split(' - ')
@@ -270,25 +284,12 @@ export const StaffCalendarPage = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-black font-medium">
-                    {t('calendar.status')}:
+                    {t('calendar.status.label', 'Status')}:
                   </span>
                   <span
-                    className={`text-xs font-medium status-text-${info.event.extendedProps.status}`}
+                    className={`text-xs font-medium status-text-${statusString}`}
                   >
-                    {(() => {
-                      switch (info.event.extendedProps.status) {
-                        case 'confirmed':
-                          return t('calendar.status.confirmed')
-                        case 'pending':
-                          return t('calendar.status.pending')
-                        case 'completed':
-                          return t('calendar.status.completed')
-                        case 'cancelled':
-                          return t('calendar.status.cancelled')
-                        default:
-                          return ''
-                      }
-                    })()}
+                    {statusString}
                   </span>
                 </div>
                 <div className="mt-2 pt-2 border-t border-border">
@@ -329,7 +330,7 @@ export const StaffCalendarPage = () => {
       <Tooltip>
         <TooltipTrigger asChild>
           <div
-            className={`group h-full w-full rounded-md border-0 p-2 overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md ${colorClass} status-${info.event.extendedProps.status}`}
+            className={`group h-full w-full rounded-md border-0 p-2 overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md ${colorClass} status-${statusString}`}
           >
             <div className="flex items-center gap-1">
               <div className="font-medium truncate transition-colors">
@@ -374,25 +375,12 @@ export const StaffCalendarPage = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-black font-medium">
-                  {t('calendar.status')}:
+                  {t('calendar.status.label', 'Status')}:
                 </span>
                 <span
-                  className={`text-xs font-medium status-text-${info.event.extendedProps.status}`}
+                  className={`text-xs font-medium status-text-${statusString}`}
                 >
-                  {(() => {
-                    switch (info.event.extendedProps.status) {
-                      case 'confirmed':
-                        return t('calendar.status.confirmed')
-                      case 'pending':
-                        return t('calendar.status.pending')
-                      case 'completed':
-                        return t('calendar.status.completed')
-                      case 'cancelled':
-                        return t('calendar.status.cancelled')
-                      default:
-                        return ''
-                    }
-                  })()}
+                  {statusString}
                 </span>
               </div>
               <div className="mt-2 pt-2 border-t border-border">
@@ -430,7 +418,7 @@ export const StaffCalendarPage = () => {
 
   const getEventClassNames = (info: any) => {
     const staffId = info.event.extendedProps.staffId
-    const status = info.event.extendedProps.status
+    const status = getStatusAsString(info.event.extendedProps.status)
     return [getStaffColor(staffId), `status-${status}`]
   }
 
@@ -554,7 +542,14 @@ export const StaffCalendarPage = () => {
                   headerToolbar={false}
                   allDaySlot={false}
                   locale={i18n.language === 'pt' ? ptLocale : undefined}
-                  events={filteredBookings}
+                  events={filteredBookings.map(booking => ({
+                    ...booking,
+                    // Ensure status is always a string
+                    extendedProps: {
+                      ...booking,
+                      status: getStatusAsString(booking.status),
+                    },
+                  }))}
                   eventContent={renderEventContent}
                   eventClassNames={getEventClassNames}
                   nowIndicator={true}

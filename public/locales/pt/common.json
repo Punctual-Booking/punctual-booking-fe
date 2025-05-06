@@ -270,18 +270,18 @@
     "allDay": "Todo o dia",
     "more": "mais",
     "service": "Serviço",
-    "staff": "Funcionário",
-    "status": "Estado",
-    "time": "Horário",
-    "event": {
-      "defaultService": "Serviço não especificado",
-      "defaultCustomer": "Cliente não especificado"
-    },
+    "staff": "Profissional",
     "status": {
+      "label": "Estado",
       "confirmed": "Confirmado",
       "pending": "Pendente",
       "completed": "Concluído",
       "cancelled": "Cancelado"
+    },
+    "time": "Hora",
+    "event": {
+      "defaultService": "Serviço",
+      "defaultCustomer": "Cliente"
     }
   },
   "services": {
