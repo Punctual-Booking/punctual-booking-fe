@@ -7,7 +7,6 @@ import {
 import {
   AppointmentResponseDto,
   AppointmentStatus,
-  AppointmentCreateDto,
   AppointmentUpdateDto,
 } from '@/types/appointment'
 import { toast } from 'sonner'

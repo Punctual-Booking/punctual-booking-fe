@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { Calendar } from '@/components/ui/calendar'
 import { StaffAvatar } from '@/components/ui/staff-avatar'
-import { ServiceImage } from '@/components/ui/service-image'
-import { Scissors } from 'lucide-react'
+import { ArrowLeft, CalendarCheck } from 'lucide-react'
 
 export const BookingPage = () => {
   const { t } = useTranslation()
@@ -60,7 +59,7 @@ export const BookingPage = () => {
 
               {/* Selected Service */}
               <div className="flex items-center gap-3">
-                <Scissors className="h-5 w-5 text-muted-foreground" />
+                <CalendarCheck className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">{selectedService.name}</p>
                   <p className="text-sm text-muted-foreground">

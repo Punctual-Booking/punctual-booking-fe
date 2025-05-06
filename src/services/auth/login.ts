@@ -1,6 +1,5 @@
 import { User } from '@/types/auth'
 import { AUTH_ENDPOINTS, getDefaultFetchOptions } from '@/config/api'
-import { hashPassword } from '@/utils/authentication/passwordUtils'
 import { FEATURES } from '@/config'
 import { mockLogin } from '@/mocks/mockAuthService'
 

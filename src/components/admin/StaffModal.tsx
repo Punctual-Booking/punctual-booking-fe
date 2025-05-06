@@ -105,19 +105,7 @@ export const StaffModal = ({ open, onClose, staff }: StaffModalProps) => {
       setIsSubmitting(true)
 
       // Format specialties and services as arrays
-      const formattedData = {
-        ...data,
-        specialties: data.specialties
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s),
-        services: data.services
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s),
-      }
-
-      // TODO: Replace with actual API call
+      // TODO: Replace with actual API call using the formatted data
       await new Promise(resolve => setTimeout(resolve, 1000))
       reset()
       onClose()

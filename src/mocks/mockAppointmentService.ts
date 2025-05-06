@@ -1,5 +1,5 @@
 import { AppointmentResponseDto, AppointmentStatus } from '@/types/appointment'
-import { addDays, addHours, addMinutes, subDays, isSameDay } from 'date-fns'
+import { addDays, addMinutes, subDays } from 'date-fns'
 import { BUSINESS_ID } from '@/config'
 import { mockStaffData, mockServiceData } from './mockData'
 

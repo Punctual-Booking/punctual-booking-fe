@@ -14,8 +14,7 @@ import { StaffAvatar } from '@/components/ui/staff-avatar'
 export const ServicesPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { services, fetchServices, fetchServicesByStaff, isLoading } =
-    useServiceStore()
+  const { services, fetchServicesByStaff, isLoading } = useServiceStore()
   const { selectedStaff, setSelectedService } = useBookingStore()
 
   useEffect(() => {

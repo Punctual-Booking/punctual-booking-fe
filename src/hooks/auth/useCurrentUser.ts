@@ -1,4 +1,3 @@
-import { User } from '@/types/auth'
 import { queryClient } from '@/lib/queryClient'
 import { useQuery } from '@tanstack/react-query'
 import { getCurrentUser as fetchCurrentUser } from '@/services/auth/me'

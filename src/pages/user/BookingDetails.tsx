@@ -28,7 +28,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Calendar as CalendarComponent } from '@/components/ui/calendar'
-import { AppointmentStatus, AppointmentUpdateDto } from '@/types/appointment'
+import { AppointmentStatus } from '@/types/appointment'
 import { useAppointments } from '@/hooks/appointments/useAppointments'
 import { useAppointment } from '@/hooks/appointments/useAppointment'
 import { useAuth } from '@/hooks/auth'

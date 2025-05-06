@@ -1,7 +1,6 @@
 import { API_URL, BUSINESS_ID, FEATURES } from '@/config'
 import {
   AppointmentResponseDto,
-  AppointmentStatus,
   AppointmentUpdateDto,
 } from '@/types/appointment'
 import {

@@ -1,7 +1,6 @@
 import { User } from '@/types/auth'
 import { AUTH_ENDPOINTS, getDefaultFetchOptions } from '@/config/api'
 import i18next from 'i18next'
-import { hashPasswords } from '@/utils/authentication/passwordUtils'
 import { FEATURES } from '@/config'
 import { mockRegister } from '@/mocks/mockAuthService'
 

@@ -80,10 +80,6 @@ export const ServiceModal = ({ open, onClose, service }: ServiceModalProps) => {
   const onSubmit = async (data: ServiceFormData) => {
     try {
       setIsSubmitting(true)
-      const formattedData = {
-        ...data,
-        price: parseFloat(data.price.replace(',', '.')) || 0,
-      } as Service
 
       // TODO: Replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call

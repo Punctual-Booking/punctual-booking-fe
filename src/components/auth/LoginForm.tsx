@@ -12,7 +12,7 @@ import { Loading } from '@/components/ui/loading'
 import { Separator } from '@/components/ui/separator'
 import { forwardRef } from 'react'
 
-export const LoginForm = forwardRef<HTMLDivElement>((props, ref) => {
+export const LoginForm = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation('common')
   const { login, isLoginLoading, error } = useAuth()
 
