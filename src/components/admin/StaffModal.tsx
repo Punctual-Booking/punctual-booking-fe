@@ -106,6 +106,7 @@ export const StaffModal = ({ open, onClose, staff }: StaffModalProps) => {
 
       // Format specialties and services as arrays
       // TODO: Replace with actual API call using the formatted data
+      console.log('data', data)
       await new Promise(resolve => setTimeout(resolve, 1000))
       reset()
       onClose()

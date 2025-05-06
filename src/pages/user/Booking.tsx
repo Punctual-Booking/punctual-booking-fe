@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useBookingStore } from '@/stores/useBookingStore'
 import { Calendar } from '@/components/ui/calendar'
 import { StaffAvatar } from '@/components/ui/staff-avatar'
-import { ArrowLeft, CalendarCheck } from 'lucide-react'
+import { CalendarCheck } from 'lucide-react'
 
 export const BookingPage = () => {
   const { t } = useTranslation()

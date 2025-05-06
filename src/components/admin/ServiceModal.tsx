@@ -17,7 +17,7 @@ import {
   createServiceSchema,
   type ServiceFormData,
 } from '@/utils/services/utils'
-import { Service, ServiceModalProps } from '@/types/services'
+import { ServiceModalProps } from '@/types/services'
 import { formatPrice } from '@/utils/format'
 import { ImageUpload } from '@/components/common/ImageUpload'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
@@ -82,6 +82,7 @@ export const ServiceModal = ({ open, onClose, service }: ServiceModalProps) => {
       setIsSubmitting(true)
 
       // TODO: Replace with actual API call
+      console.log('data', data)
       await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
       reset()
       onClose()
