@@ -8,6 +8,7 @@
     "search": "Search",
     "save": "Save",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "delete": "Delete",
     "edit": "Edit",
     "add": "Add",
@@ -39,10 +40,31 @@
     "email": "Email",
     "password": "Password",
     "name": "Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "passwordConfirmation": "Confirm Password",
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
     "namePlaceholder": "Enter your name",
-    "logout": "Logout"
+    "firstNamePlaceholder": "First name",
+    "lastNamePlaceholder": "Last name",
+    "passwordConfirmationPlaceholder": "Confirm password",
+    "logout": "Logout",
+    "registerSuccess": "Registration successful!",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "continueWithFacebook": "Continue with Facebook",
+    "orContinueWith": "or continue with",
+    "forgotPassword": "Forgot password?",
+    "errors": {
+      "usernameExists": "This email is already registered.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "passwordMismatch": "Passwords do not match.",
+      "invalidCredentials": "Invalid email or password.",
+      "serverError": "Server error. Please try again later."
+    }
   },
   "validation": {
     "required": "This field is required",
@@ -54,6 +76,13 @@
     "name": {
       "min": "Name must be at least {{min}} characters"
     },
+    "firstName": {
+      "min": "First name must be at least {{min}} characters"
+    },
+    "lastName": {
+      "min": "Last name must be at least {{min}} characters"
+    },
+    "passwordConfirmation": "Passwords do not match",
     "service": {
       "name": "Name is required",
       "description": "Description is required",
@@ -220,17 +249,12 @@
     },
     "staffCalendar": {
       "title": "Staff Calendar",
-      "viewAll": "View All Staff",
+      "viewAll": "View All",
       "clearSelection": "Clear Selection",
-      "selectStaff": "Select Staff Members",
-      "services": "services",
-      "noBookings": "No bookings to display",
-      "filterByStaff": "Filter by Staff",
-      "bookingDetails": "Booking Details",
-      "customer": "Customer",
-      "service": "Service",
-      "time": "Time",
-      "duration": "Duration"
+      "selectStaff": "Select Staff",
+      "active": "Active",
+      "inactive": "Inactive",
+      "servicesCount": "{{count}} services"
     }
   },
   "calendar": {
@@ -242,24 +266,59 @@
     "next": "Next",
     "noEventsToDisplay": "No events to display",
     "allDay": "All day",
-    "more": "more"
+    "more": "more",
+    "service": "Service",
+    "staff": "Staff",
+    "status": {
+      "label": "Status",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "time": "Time",
+    "event": {
+      "defaultService": "Service",
+      "defaultCustomer": "Customer"
+    }
   },
   "services": {
-    "title": "Our Services",
-    "description": "Choose from our range of professional services",
-    "duration": "{{duration}} minutes",
-    "select": "Select Service",
-    "price": "${price}",
-    "loading": "Loading services..."
+    "title": "Services",
+    "description": "Choose a service for your appointment",
+    "select": "Select this service",
+    "selected": "Selected Service",
+    "loading": "Loading services...",
+    "noServicesAvailable": "No services are available for the selected staff member"
   },
   "staff": {
-    "title": "Choose Your Stylist",
-    "description": "Select a stylist for your appointment",
-    "select": "Choose Stylist",
-    "availability": "Check Availability",
-    "experience": "{{years}} years experience",
+    "title": "Staff Management",
+    "addStaff": "Add Staff",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "phone": "Phone",
     "specialties": "Specialties",
-    "loading": "Loading staff members..."
+    "services": "Services",
+    "experience": "Experience",
+    "years": "years",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "isActive": "Active Status",
+    "actions": "Actions",
+    "namePlaceholder": "Enter name",
+    "emailPlaceholder": "Enter email",
+    "phonePlaceholder": "Enter phone number",
+    "specialtiesPlaceholder": "Enter specialties (e.g. Hair, Makeup, Nails)",
+    "servicesPlaceholder": "Enter services (e.g. Haircut, Styling, Manicure)",
+    "separateWithCommas": "Separate multiple items with commas",
+    "selectRole": "Select a role",
+    "selected": "Selected Staff",
+    "loading": "Loading staff members...",
+    "description": "Choose a staff member for your appointment",
+    "selectDescription": "Select a stylist you'd like to work with",
+    "noStaffAvailable": "No staff members are currently available",
+    "select": "Select this staff member"
   },
   "booking": {
     "title": "Choose Date & Time",
@@ -270,6 +329,7 @@
     "unavailable": "Unavailable",
     "next": "Continue to Confirmation",
     "backToDate": "Back to Date Selection",
+    "summary": "Booking Summary",
     "status": {
       "pending": "Pending",
       "confirmed": "Confirmed",
@@ -314,16 +374,21 @@
     "description": "Please review your booking details before confirming",
     "bookingDetails": "Booking Details",
     "confirm": "Confirm Booking",
+    "notes": "Special Requests or Notes",
+    "notesPlaceholder": "Any special requests or information for your stylist (optional)",
+    "creating": "Creating your appointment...",
     "success": {
       "title": "Booking Confirmed!",
       "description": "Your appointment has been successfully booked",
-      "emailSent": "A confirmation email has been sent to your email address"
+      "emailSent": "A confirmation email has been sent to your email address",
+      "with": "with",
+      "viewAppointments": "View My Appointments"
     }
   },
   "customer": {
     "dashboard": {
       "title": "My Appointments",
-      "bookNew": "Book New Appointment",
+      "bookNew": "Book Appointment",
       "nextAppointment": "Next Appointment",
       "upcomingAppointments": "Upcoming Appointments",
       "pastAppointments": "Past Appointments",
@@ -331,5 +396,22 @@
       "noPast": "No past appointments",
       "viewDetails": "View Details"
     }
+  },
+  "appointments": {
+    "createSuccess": "Appointment created successfully",
+    "createError": "Failed to create appointment",
+    "updateSuccess": "Appointment updated successfully",
+    "updateError": "Failed to update appointment",
+    "cancelSuccess": "Appointment cancelled successfully",
+    "cancelError": "Failed to cancel appointment",
+    "rescheduleSuccess": "Appointment rescheduled successfully",
+    "rescheduleError": "Failed to reschedule appointment",
+    "fetchError": "Failed to load appointments",
+    "loading": "Loading appointments..."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "bookAppointment": "Book Appointment",
+    "book": "Book"
   }
 }

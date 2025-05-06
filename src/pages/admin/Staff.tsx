@@ -19,6 +19,7 @@ interface StaffMemberWithUI extends StaffMember {
   role: 'admin' | 'staff'
   joinDate?: string
   status?: 'active' | 'inactive'
+  businessId: string
 }
 
 export const StaffPage = () => {
@@ -43,6 +44,7 @@ export const StaffPage = () => {
       isActive: true,
       joinDate: '2021-01-15',
       status: 'active',
+      businessId: '1',
     },
     {
       id: '2',
@@ -56,6 +58,7 @@ export const StaffPage = () => {
       isActive: true,
       joinDate: '2022-03-10',
       status: 'active',
+      businessId: '1',
     },
     {
       id: '3',
@@ -69,6 +72,7 @@ export const StaffPage = () => {
       isActive: false,
       joinDate: '2020-06-22',
       status: 'inactive',
+      businessId: '1',
     },
     {
       id: '4',
@@ -82,6 +86,7 @@ export const StaffPage = () => {
       isActive: true,
       joinDate: '2021-11-05',
       status: 'active',
+      businessId: '1',
     },
     {
       id: '5',
@@ -95,6 +100,7 @@ export const StaffPage = () => {
       isActive: true,
       joinDate: '2019-08-17',
       status: 'active',
+      businessId: '1',
     },
     {
       id: '6',
@@ -108,6 +114,7 @@ export const StaffPage = () => {
       isActive: false,
       joinDate: '2018-04-30',
       status: 'inactive',
+      businessId: '1',
     },
   ])
 

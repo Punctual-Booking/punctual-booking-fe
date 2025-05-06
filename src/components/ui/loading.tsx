@@ -24,7 +24,7 @@ export function Loading({
   text = 'Loading...',
   size = 'md',
   className,
-  centered = false,
+  centered = true,
 }: LoadingProps) {
   const sizeClasses = {
     sm: 'h-4 w-4',

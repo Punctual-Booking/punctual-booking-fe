@@ -14,6 +14,7 @@ interface BookingStore {
   selectedStaff: StaffMember | null
   setSelectedService: (service: Service) => void
   setSelectedStaff: (staff: StaffMember) => void
+  resetBooking: () => void
   userBookings: Booking[]
   fetchUserBookings: (userId: string) => Promise<void>
 }
@@ -146,6 +147,7 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
   selectedStaff: null,
   setSelectedService: service => set({ selectedService: service }),
   setSelectedStaff: staff => set({ selectedStaff: staff }),
+  resetBooking: () => set({ selectedService: null, selectedStaff: null }),
   userBookings: [],
   fetchUserBookings: async userId => {
     set({ isLoading: true })

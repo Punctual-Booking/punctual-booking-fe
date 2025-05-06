@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useStaffStore } from '@/stores/useStaffStore'
@@ -8,29 +8,61 @@ import { useBookingStore } from '@/stores/useBookingStore'
 import { Badge } from '@/components/ui/badge'
 import { StaffMember } from '@/types/staff'
 import { Loading } from '@/components/ui/loading'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { StaffAvatar } from '@/components/ui/staff-avatar'
 
 export const StaffSelectionPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { staff, fetchStaff, isLoading } = useStaffStore()
-  const { selectedService, setSelectedStaff } = useBookingStore()
+  const { staff, fetchStaff, isLoading, error } = useStaffStore()
+  const { setSelectedStaff, resetBooking } = useBookingStore()
 
   useEffect(() => {
-    // Redirect if no service is selected
-    if (!selectedService) {
-      navigate('/user/services')
-      return
-    }
+    // Reset any previous booking data when starting a new booking flow
+    resetBooking()
+    // Fetch all available staff members
     fetchStaff()
-  }, [selectedService, navigate, fetchStaff])
+  }, [fetchStaff, resetBooking])
 
   const handleSelectStaff = (staffId: string) => {
-    setSelectedStaff(staff.find((s: StaffMember) => s.id === staffId)!)
-    navigate('/user/booking')
+    // Save the selected staff to the booking store
+    const staffMember = staff.find((s: StaffMember) => s.id === staffId)
+    if (staffMember) {
+      setSelectedStaff(staffMember)
+      // Navigate to service selection
+      navigate({ to: '/user/services' })
+    }
   }
 
   if (isLoading) {
     return <Loading centered className="py-8" text={t('staff.loading')} />
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive" className="my-8">
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    )
+  }
+
+  if (staff.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+            {t('staff.title')}
+          </h1>
+          <p className="text-muted-foreground mt-2">{t('staff.description')}</p>
+        </div>
+        <Alert className="my-8">
+          <AlertDescription>{t('staff.noStaffAvailable')}</AlertDescription>
+        </Alert>
+        <Button onClick={() => navigate({ to: '/user/dashboard' })}>
+          {t('common.back')}
+        </Button>
+      </div>
+    )
   }
 
   return (
@@ -39,18 +71,21 @@ export const StaffSelectionPage = () => {
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           {t('staff.title')}
         </h1>
-        <p className="text-muted-foreground mt-2">{t('staff.description')}</p>
+        <p className="text-muted-foreground mt-2">
+          {t('staff.selectDescription')}
+        </p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {staff.map(member => (
+        {staff.map((member: StaffMember) => (
           <Card key={member.id}>
             <CardHeader>
-              <div className="aspect-square relative rounded-lg overflow-hidden mb-4">
-                <img
-                  src={member.image || '/images/default-avatar.png'}
-                  alt={member.name}
-                  className="object-cover w-full h-full"
+              <div className="flex justify-center mb-4">
+                <StaffAvatar
+                  src={member.image}
+                  name={member.name}
+                  size="xl"
+                  className="shadow-md"
                 />
               </div>
               <CardTitle>{member.name}</CardTitle>

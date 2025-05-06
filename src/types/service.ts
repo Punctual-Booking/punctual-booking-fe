@@ -3,7 +3,9 @@ export interface Service {
   name: string
   description: string
   price: number
+  duration: number
   image?: string
+  businessId: string
 }
 
 export interface ServicePartial {
@@ -11,5 +13,7 @@ export interface ServicePartial {
   name?: string
   description?: string
   price?: number
+  duration?: number
   image?: string
+  businessId?: string
 }

@@ -17,7 +17,7 @@ import {
   createServiceSchema,
   type ServiceFormData,
 } from '@/utils/services/utils'
-import { Service, ServiceModalProps } from '@/types/services'
+import { ServiceModalProps } from '@/types/services'
 import { formatPrice } from '@/utils/format'
 import { ImageUpload } from '@/components/common/ImageUpload'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
@@ -80,14 +80,10 @@ export const ServiceModal = ({ open, onClose, service }: ServiceModalProps) => {
   const onSubmit = async (data: ServiceFormData) => {
     try {
       setIsSubmitting(true)
-      const formattedData = {
-        ...data,
-        price: parseFloat(data.price.replace(',', '.')) || 0,
-      } as Service
 
       // TODO: Replace with actual API call
+      console.log('data', data)
       await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
-      console.log('Save service:', formattedData)
       reset()
       onClose()
     } catch (error) {

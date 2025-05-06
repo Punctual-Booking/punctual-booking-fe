@@ -14,10 +14,11 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const { t } = useTranslation()
 
     return (
-      <div className="space-y-2">
+      <div className="space-y-2" data-slot="form-input-container">
         <Label htmlFor={props.id}>{label}</Label>
         <Input
           ref={ref}
+          data-slot="form-input"
           placeholder={t(`auth.${translationKey}Placeholder`)}
           {...props}
         />

@@ -8,6 +8,7 @@
     "search": "Pesquisar",
     "save": "Guardar",
     "cancel": "Cancelar",
+    "confirm": "Confirmar",
     "delete": "Eliminar",
     "edit": "Editar",
     "add": "Adicionar",
@@ -40,11 +41,31 @@
     "email": "Email",
     "password": "Palavra-passe",
     "name": "Nome",
-
+    "firstName": "Nome Próprio",
+    "lastName": "Apelido",
+    "passwordConfirmation": "Confirmar Palavra-passe",
     "emailPlaceholder": "Introduza o seu email",
     "passwordPlaceholder": "Introduza a sua palavra-passe",
     "namePlaceholder": "Introduza o seu nome",
-    "logout": "Terminar Sessão"
+    "firstNamePlaceholder": "Nome próprio",
+    "lastNamePlaceholder": "Apelido",
+    "passwordConfirmationPlaceholder": "Confirmar palavra-passe",
+    "logout": "Terminar Sessão",
+    "registerSuccess": "Registo efetuado com sucesso!",
+    "noAccount": "Não tem uma conta?",
+    "haveAccount": "Já tem uma conta?",
+    "continueWithGoogle": "Continuar com Google",
+    "continueWithApple": "Continuar com Apple",
+    "continueWithFacebook": "Continuar com Facebook",
+    "orContinueWith": "ou continue com",
+    "forgotPassword": "Esqueceu a palavra-passe?",
+    "errors": {
+      "usernameExists": "Este email já está registado.",
+      "registrationFailed": "Erro no registo. Por favor, tente novamente.",
+      "passwordMismatch": "As palavras-passe não coincidem.",
+      "invalidCredentials": "Email ou palavra-passe inválidos.",
+      "serverError": "Erro de servidor. Por favor, tente mais tarde."
+    }
   },
   "validation": {
     "required": "Este campo é obrigatório",
@@ -56,6 +77,13 @@
     "name": {
       "min": "O nome deve ter pelo menos {{min}} caracteres"
     },
+    "firstName": {
+      "min": "O nome próprio deve ter pelo menos {{min}} caracteres"
+    },
+    "lastName": {
+      "min": "O apelido deve ter pelo menos {{min}} caracteres"
+    },
+    "passwordConfirmation": "As palavras-passe não coincidem",
     "service": {
       "name": "O nome é obrigatório",
       "description": "A descrição é obrigatória",
@@ -222,18 +250,13 @@
       }
     },
     "staffCalendar": {
-      "title": "Calendário da Equipa",
-      "viewAll": "Ver Toda a Equipa",
+      "title": "Calendário de Funcionários",
+      "viewAll": "Ver Todos",
       "clearSelection": "Limpar Seleção",
-      "selectStaff": "Selecionar Profissionais",
-      "services": "serviços",
-      "noBookings": "Sem agendamentos para mostrar",
-      "filterByStaff": "Filtrar por Profissional",
-      "bookingDetails": "Detalhes do Agendamento",
-      "customer": "Cliente",
-      "service": "Serviço",
-      "time": "Hora",
-      "duration": "Duração"
+      "selectStaff": "Selecionar Funcionários",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "servicesCount": "{{count}} serviços"
     }
   },
   "calendar": {
@@ -245,24 +268,59 @@
     "next": "Próximo",
     "noEventsToDisplay": "Sem eventos para mostrar",
     "allDay": "Todo o dia",
-    "more": "mais"
+    "more": "mais",
+    "service": "Serviço",
+    "staff": "Profissional",
+    "status": {
+      "label": "Estado",
+      "confirmed": "Confirmado",
+      "pending": "Pendente",
+      "completed": "Concluído",
+      "cancelled": "Cancelado"
+    },
+    "time": "Hora",
+    "event": {
+      "defaultService": "Serviço",
+      "defaultCustomer": "Cliente"
+    }
   },
   "services": {
-    "title": "Os Nossos Serviços",
-    "description": "Escolha entre a nossa gama de serviços profissionais",
-    "duration": "{{duration}} minutos",
-    "select": "Selecionar Serviço",
-    "price": "{{price}}€",
-    "loading": "A carregar serviços..."
+    "title": "Serviços",
+    "description": "Escolha um serviço para a sua marcação",
+    "select": "Selecionar este serviço",
+    "selected": "Serviço Selecionado",
+    "loading": "A carregar serviços...",
+    "noServicesAvailable": "Não há serviços disponíveis para o profissional selecionado"
   },
   "staff": {
-    "title": "Escolha o Seu Estilista",
-    "description": "Selecione um estilista para o seu agendamento",
-    "select": "Escolher Estilista",
-    "availability": "Verificar Disponibilidade",
-    "experience": "{{years}} anos de experiência",
+    "title": "Gestão de Equipa",
+    "addStaff": "Adicionar Membro",
+    "name": "Nome",
+    "email": "Email",
+    "role": "Função",
+    "phone": "Telefone",
     "specialties": "Especialidades",
-    "loading": "A carregar estilistas..."
+    "services": "Serviços",
+    "experience": "Experiência",
+    "years": "anos",
+    "status": "Estado",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "isActive": "Estado Ativo",
+    "actions": "Ações",
+    "namePlaceholder": "Introduza o nome",
+    "emailPlaceholder": "Introduza o email",
+    "phonePlaceholder": "Introduza o número de telefone",
+    "specialtiesPlaceholder": "Introduza especialidades (ex. Cabelo, Maquilhagem, Unhas)",
+    "servicesPlaceholder": "Introduza serviços (ex. Corte, Penteado, Manicure)",
+    "separateWithCommas": "Separe vários itens com vírgulas",
+    "selectRole": "Selecione uma função",
+    "selected": "Profissional Selecionado",
+    "loading": "A carregar profissionais...",
+    "description": "Escolha um profissional para a sua marcação",
+    "selectDescription": "Selecione o profissional com quem gostaria de trabalhar",
+    "noStaffAvailable": "Não há profissionais disponíveis de momento",
+    "select": "Selecionar este profissional"
   },
   "booking": {
     "title": "Escolha Data e Hora",
@@ -317,16 +375,21 @@
     "description": "Por favor, reveja os detalhes do seu agendamento antes de confirmar",
     "bookingDetails": "Detalhes do Agendamento",
     "confirm": "Confirmar Agendamento",
+    "notes": "Pedidos Especiais ou Notas",
+    "notesPlaceholder": "Quaisquer pedidos especiais ou informações para o seu estilista (opcional)",
+    "creating": "A criar o seu agendamento...",
     "success": {
       "title": "Agendamento Confirmado!",
       "description": "O seu agendamento foi realizado com sucesso",
-      "emailSent": "Um email de confirmação foi enviado para o seu endereço de email"
+      "emailSent": "Um email de confirmação foi enviado para o seu endereço de email",
+      "with": "com",
+      "viewAppointments": "Ver Meus Agendamentos"
     }
   },
   "customer": {
     "dashboard": {
       "title": "Meus Agendamentos",
-      "bookNew": "Agendar Novo Serviço",
+      "bookNew": "Agendar Serviço",
       "nextAppointment": "Próximo Agendamento",
       "upcomingAppointments": "Agendamentos Futuros",
       "pastAppointments": "Agendamentos Anteriores",
@@ -334,5 +397,22 @@
       "noPast": "Não há agendamentos anteriores",
       "viewDetails": "Ver Detalhes"
     }
+  },
+  "appointments": {
+    "createSuccess": "Agendamento criado com sucesso",
+    "createError": "Falha ao criar agendamento",
+    "updateSuccess": "Agendamento atualizado com sucesso",
+    "updateError": "Falha ao atualizar agendamento",
+    "cancelSuccess": "Agendamento cancelado com sucesso",
+    "cancelError": "Falha ao cancelar agendamento",
+    "rescheduleSuccess": "Agendamento remarcado com sucesso",
+    "rescheduleError": "Falha ao remarcar agendamento",
+    "fetchError": "Falha ao carregar agendamentos",
+    "loading": "A carregar agendamentos..."
+  },
+  "nav": {
+    "dashboard": "Painel",
+    "bookAppointment": "Agendar Serviço",
+    "book": "Agendar"
   }
 }
