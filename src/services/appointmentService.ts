@@ -170,14 +170,18 @@ export const getAppointmentById = async (
   }
 
   console.log(`Making real API call to fetch appointment: ${id}`)
+  const token = localStorage.getItem('access_token') || undefined
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
   const response = await fetch(
     `${API_URL}/api/appointments/${id}?businessId=${BUSINESS_ID}`,
     {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+      headers,
     }
   )
 

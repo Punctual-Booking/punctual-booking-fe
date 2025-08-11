@@ -193,7 +193,9 @@
         "closingTime": "Hora de Fecho",
         "email": "Email do Negócio",
         "phone": "Telefone do Negócio",
-        "address": "Morada do Negócio"
+        "address": "Morada do Negócio",
+        "logo": "Logótipo",
+        "logoUpload": "Carregar Logótipo"
       },
       "booking": {
         "title": "Definições de Agendamento",
@@ -332,6 +334,8 @@
     "next": "Continuar para Confirmação",
     "backToDate": "Voltar à Seleção de Data",
     "status": {
+      "scheduled": "Agendado",
+      "rescheduled": "Reagendado",
       "pending": "Pendente",
       "confirmed": "Confirmado",
       "completed": "Concluído",
@@ -414,5 +418,11 @@
     "dashboard": "Painel",
     "bookAppointment": "Agendar Serviço",
     "book": "Agendar"
+  },
+  "publicAppointment": {
+    "title": "Gestão da Marcação",
+    "accessNote": "Para reagendar ou cancelar esta marcação, por favor inicie sessão ou crie uma conta.",
+    "loginToManage": "Entrar para gerir",
+    "registerToManage": "Registar para gerir"
   }
 }

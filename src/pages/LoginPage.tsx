@@ -13,12 +13,14 @@ import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { ThemeSwitcher } from '@/components/common/ThemeSwitcher'
 import { Image } from '@/components/ui/image'
 import logo from '@/assets/images/homepage_logo.png'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import { FEATURES } from '@/config'
 import { useCurrentUser } from '@/hooks/auth'
 import { UserRole } from '@/types/auth'
 
 export const LoginPage = () => {
   const { t } = useTranslation('common')
+  const { business } = useSettingsStore()
   const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false)
   const { isAuthenticated, user } = useCurrentUser()
   const navigate = useNavigate()
@@ -63,9 +65,9 @@ export const LoginPage = () => {
         <LanguageSwitcher />
       </div>
       <Image
-        src={logo}
+        src={business.logoUrl || logo}
         alt="Punctual Logo"
-        className="mb-8 h-32 w-32 md:h-48 md:w-48"
+        className="mb-8 h-32 w-32 md:h-48 md:w-48 rounded-md object-cover"
         aspectRatio="square"
       />
       <Card className="w-full max-w-[350px]">

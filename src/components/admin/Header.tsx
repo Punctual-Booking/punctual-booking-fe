@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/auth'
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { Image } from '@/components/ui/image'
 
 interface HeaderProps {
   children?: React.ReactNode
@@ -15,7 +16,7 @@ interface HeaderProps {
 export const Header = memo(({ children }: HeaderProps) => {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
-  const { businessName } = useSettingsStore()
+  const { businessName, business } = useSettingsStore()
 
   // Memoize the logout handler to prevent recreating on each render
   const handleLogout = useCallback(() => {
@@ -27,7 +28,17 @@ export const Header = memo(({ children }: HeaderProps) => {
       <div className="container flex h-14 items-center">
         <div className="flex flex-1 items-center gap-2">
           {children}
-          <span className="text-sm font-medium mr-2">{businessName}</span>
+          <span className="text-sm font-medium mr-2 flex items-center gap-2">
+            {business.logoUrl && (
+              <Image
+                src={business.logoUrl}
+                alt={businessName}
+                className="h-6 w-6 rounded-sm object-cover"
+                aspectRatio="square"
+              />
+            )}
+            {businessName}
+          </span>
           <span className="hidden md:inline text-sm text-muted-foreground">
             {t('admin.welcome', { name: user?.name })}
           </span>

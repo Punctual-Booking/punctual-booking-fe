@@ -138,13 +138,20 @@ const getStatusAsString = (status: any): string => {
   return 'default'
 }
 
+// Present status with the first letter capitalized and split camelCase
+const formatStatusLabel = (status: string): string => {
+  if (!status) return ''
+  const spaced = status.replace(/([A-Z])/g, ' $1')
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1)
+}
+
 export const StaffCalendarPage = () => {
   const { t, i18n } = useTranslation()
   const [view, setView] = useState('timeGridDay')
   const [date, setDate] = useState(new Date())
   const [selectedStaff, setSelectedStaff] = useState<string[]>([])
   const [filteredBookings, setFilteredBookings] = useState(mockBookings)
-  const calendarRef = useRef(null)
+  const calendarRef = useRef<FullCalendar | null>(null)
 
   // Filter bookings based on selected staff
   useEffect(() => {
@@ -178,30 +185,38 @@ export const StaffCalendarPage = () => {
     setSelectedStaff([])
   }
 
+  // Change calendar view when dropdown selection changes
+  useEffect(() => {
+    const api = calendarRef.current?.getApi()
+    if (!api) return
+    // Defer to a microtask to avoid nested flushSync warnings from FullCalendar
+    Promise.resolve().then(() => api.changeView(view))
+  }, [view])
+
   // Navigate to previous day/week/month
   const handlePrevious = () => {
-    if (calendarRef.current) {
-      const calendar = calendarRef.current as any
-      calendar.getApi().prev()
-      setDate(calendar.getApi().getDate())
+    const api = calendarRef.current?.getApi()
+    if (api) {
+      api.prev()
+      setDate(api.getDate())
     }
   }
 
   // Navigate to next day/week/month
   const handleNext = () => {
-    if (calendarRef.current) {
-      const calendar = calendarRef.current as any
-      calendar.getApi().next()
-      setDate(calendar.getApi().getDate())
+    const api = calendarRef.current?.getApi()
+    if (api) {
+      api.next()
+      setDate(api.getDate())
     }
   }
 
   // Navigate to today
   const handleToday = () => {
-    if (calendarRef.current) {
-      const calendar = calendarRef.current as any
-      calendar.getApi().today()
-      setDate(calendar.getApi().getDate())
+    const api = calendarRef.current?.getApi()
+    if (api) {
+      api.today()
+      setDate(api.getDate())
     }
   }
 
@@ -253,7 +268,7 @@ export const StaffCalendarPage = () => {
             <div
               className={`group h-full w-full rounded-md border-0 py-0.5 px-1.5 text-xs overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md ${colorClass}`}
             >
-              <div className="truncate font-medium group-hover:text-foreground transition-colors">
+              <div className="truncate font-medium transition-colors">
                 {customerName}
               </div>
             </div>
@@ -262,60 +277,52 @@ export const StaffCalendarPage = () => {
             side="right"
             align="start"
             sideOffset={8}
-            className="p-0 border shadow-lg bg-card"
+            className="p-0 border shadow-lg bg-card min-w-[240px] rounded-md"
           >
             <div className="p-3">
               <h3 className="font-semibold text-sm mb-2 text-foreground">
                 {customerName}
               </h3>
-              <div className="text-xs text-foreground space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-black font-medium">
+              <div className="text-xs text-foreground">
+                <div className="grid grid-cols-[auto,1fr] items-start gap-x-3 gap-y-1.5">
+                  <span className="text-xs font-medium">
                     {t('calendar.service')}:
                   </span>
                   <span className="font-medium">{serviceName}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-black font-medium">
+
+                  <span className="text-xs font-medium">
                     {t('calendar.staff')}:
                   </span>
                   <span>{staff?.name}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-black font-medium">
+
+                  <span className="text-xs font-medium">
                     {t('calendar.status.label', 'Status')}:
                   </span>
-                  <span
-                    className={`text-xs font-medium status-text-${statusString}`}
-                  >
-                    {statusString}
+                  <span className={`text-xs font-medium status-text-${statusString}`}>
+                    {formatStatusLabel(statusString)}
                   </span>
                 </div>
-                <div className="mt-2 pt-2 border-t border-border">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-black font-medium">
-                      {t('calendar.time')}:
-                    </span>
-                    <span>
-                      {new Date(info.event.start).toLocaleTimeString(
-                        i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                        {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          hour12: false,
-                        }
-                      )}{' '}
-                      -{' '}
-                      {new Date(info.event.end).toLocaleTimeString(
-                        i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                        {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          hour12: false,
-                        }
-                      )}
-                    </span>
-                  </div>
+                <div className="mt-2 pt-2 border-t border-border grid grid-cols-[auto,1fr] items-start gap-x-3">
+                  <span className="text-xs font-medium">{t('calendar.time')}:</span>
+                  <span>
+                    {new Date(info.event.start).toLocaleTimeString(
+                      i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                      {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      }
+                    )}
+                    {' '}-{' '}
+                    {new Date(info.event.end).toLocaleTimeString(
+                      i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                      {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      }
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
@@ -353,60 +360,52 @@ export const StaffCalendarPage = () => {
           side="right"
           align="start"
           sideOffset={8}
-          className="p-0 border shadow-lg bg-card"
+          className="p-0 border shadow-lg bg-card min-w-[240px] rounded-md"
         >
           <div className="p-3">
             <h3 className="font-semibold text-sm mb-2 text-foreground">
               {customerName}
             </h3>
-            <div className="text-xs text-foreground space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-black font-medium">
+            <div className="text-xs text-foreground">
+              <div className="grid grid-cols-[auto,1fr] items-start gap-x-3 gap-y-1.5">
+                <span className="text-xs font-medium">
                   {t('calendar.service')}:
                 </span>
                 <span className="font-medium">{serviceName}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-black font-medium">
+
+                <span className="text-xs font-medium">
                   {t('calendar.staff')}:
                 </span>
                 <span>{staff?.name}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-black font-medium">
+
+                <span className="text-xs font-medium">
                   {t('calendar.status.label', 'Status')}:
                 </span>
-                <span
-                  className={`text-xs font-medium status-text-${statusString}`}
-                >
-                  {statusString}
+                <span className={`text-xs font-medium status-text-${statusString}`}>
+                  {formatStatusLabel(statusString)}
                 </span>
               </div>
-              <div className="mt-2 pt-2 border-t border-border">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-black font-medium">
-                    {t('calendar.time')}:
-                  </span>
-                  <span>
-                    {new Date(info.event.start).toLocaleTimeString(
-                      i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                      {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false,
-                      }
-                    )}{' '}
-                    -{' '}
-                    {new Date(info.event.end).toLocaleTimeString(
-                      i18n.language === 'pt' ? 'pt-PT' : 'en-US',
-                      {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false,
-                      }
-                    )}
-                  </span>
-                </div>
+              <div className="mt-2 pt-2 border-t border-border grid grid-cols-[auto,1fr] items-start gap-x-3">
+                <span className="text-xs font-medium">{t('calendar.time')}:</span>
+                <span>
+                  {new Date(info.event.start).toLocaleTimeString(
+                    i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                    {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                    }
+                  )}
+                  {' '}-{' '}
+                  {new Date(info.event.end).toLocaleTimeString(
+                    i18n.language === 'pt' ? 'pt-PT' : 'en-US',
+                    {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                    }
+                  )}
+                </span>
               </div>
             </div>
           </div>
@@ -561,7 +560,11 @@ export const StaffCalendarPage = () => {
                     startTime: '09:00',
                     endTime: '18:00',
                   }}
-                  datesSet={(arg: DatesSetArg) => setDate(new Date(arg.start))}
+                  datesSet={(arg: DatesSetArg) => {
+                    // Defer to microtask to avoid nested flush warnings
+                    const nextDate = new Date(arg.start)
+                    Promise.resolve().then(() => setDate(nextDate))
+                  }}
                 />
               </div>
             </div>

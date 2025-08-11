@@ -31,6 +31,7 @@ const ConfirmationPage = lazy(() => import('@/pages/user/Confirmation'))
 const BookingSuccessPage = lazy(() => import('@/pages/user/BookingSuccess'))
 const CustomerDashboard = lazy(() => import('@/pages/user/CustomerDashboard'))
 const BookingDetails = lazy(() => import('@/pages/user/BookingDetails'))
+const PublicAppointmentPage = lazy(() => import('@/pages/PublicAppointment'))
 
 // Lazy load our test page
 const AppointmentTest = lazy(() => import('@/pages/AppointmentTest'))
@@ -337,6 +338,16 @@ const bookingDetailsRoute = createRoute({
   },
 })
 
+const publicAppointmentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/appointment/$id',
+  component: () => (
+    <Suspense fallback={<Loading centered />}>
+      <PublicAppointmentPage />
+    </Suspense>
+  ),
+})
+
 // Create the route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -360,6 +371,7 @@ const routeTree = rootRoute.addChildren([
     customerBookingSuccessRoute,
   ]),
   bookingDetailsRoute,
+  publicAppointmentRoute,
 ])
 
 // Create the router

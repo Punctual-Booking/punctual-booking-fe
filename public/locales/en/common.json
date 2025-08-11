@@ -191,7 +191,9 @@
         "closingTime": "Closing Time",
         "email": "Business Email",
         "phone": "Business Phone",
-        "address": "Business Address"
+        "address": "Business Address",
+        "logo": "Logo",
+        "logoUpload": "Upload Logo"
       },
       "booking": {
         "title": "Booking Settings",
@@ -331,6 +333,8 @@
     "backToDate": "Back to Date Selection",
     "summary": "Booking Summary",
     "status": {
+      "scheduled": "Scheduled",
+      "rescheduled": "Rescheduled",
       "pending": "Pending",
       "confirmed": "Confirmed",
       "completed": "Completed",
@@ -413,5 +417,11 @@
     "dashboard": "Dashboard",
     "bookAppointment": "Book Appointment",
     "book": "Book"
+  },
+  "publicAppointment": {
+    "title": "Appointment Overview",
+    "accessNote": "To reschedule or cancel this appointment, please log in or create an account.",
+    "loginToManage": "Login to manage",
+    "registerToManage": "Register to manage"
   }
 }
