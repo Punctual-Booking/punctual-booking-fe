@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { Image } from '@/components/ui/image'
 import favicon from '@/assets/images/favicon.png'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 import { useState, useEffect } from 'react'
@@ -37,6 +38,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const { t } = useTranslation()
   const router = useRouter()
   const { user } = useAuth()
+  const { business } = useSettingsStore()
   const [activePath, setActivePath] = useState(router.state.location.pathname)
 
   // Update active path when location changes
@@ -134,13 +136,22 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               onClose()
             }}
           >
-            {theme === 'light' && (
+            {business.logoUrl ? (
               <Image
-                src={favicon}
-                alt="Punctual Logo"
-                className="h-8 w-8"
+                src={business.logoUrl}
+                alt={t('app.name')}
+                className="h-8 w-8 rounded-sm object-cover"
                 aspectRatio="square"
               />
+            ) : (
+              theme === 'light' && (
+                <Image
+                  src={favicon}
+                  alt="Punctual Logo"
+                  className="h-8 w-8"
+                  aspectRatio="square"
+                />
+              )
             )}
             <span className="font-semibold">{t('app.name')}</span>
           </div>

@@ -34,7 +34,17 @@ export const Header = memo(() => {
     <header className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/user/dashboard" className="text-xl font-bold">
+          <Link
+            to="/user/dashboard"
+            className="text-xl font-bold flex items-center gap-2"
+          >
+            {business.logoUrl && (
+              <img
+                src={business.logoUrl}
+                alt={business.businessName}
+                className="h-8 w-8 rounded-sm object-cover"
+              />
+            )}
             {business.businessName}
           </Link>
           <nav className="hidden md:flex items-center gap-4">

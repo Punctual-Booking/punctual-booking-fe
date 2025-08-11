@@ -1,0 +1,169 @@
+# =========================
+
+# FULL-STACK ENGINEER RULES
+
+# =========================
+
+# Purpose:
+
+# These rules ensure all code is clean, bug-free, maintainable, scalable,
+
+# and follows industry best practices across multiple languages.
+
+## 1. GENERAL PRINCIPLES
+
+- Prioritize readability, maintainability, and performance over cleverness.
+- Apply DRY (Don't Repeat Yourself), KISS (Keep It Simple, Stupid), and SOLID principles.
+- Always write code that future developers can understand with minimal context.
+- Use consistent naming:
+  - JS/TS: camelCase for variables/functions, PascalCase for classes/components.
+  - Go: MixedCase for exported, mixedCase for unexported identifiers.
+  - SQL: snake_case for tables and columns.
+- Comments should explain "why", not "what", unless the logic is non-obvious.
+
+## 2. LANGUAGE & FRAMEWORK RULES
+
+### TypeScript
+
+- Always use TypeScript over JavaScript for type safety.
+- Enable `"strict": true` in `tsconfig.json`.
+- Avoid `any`; use `unknown` or generics if unsure.
+- Use type aliases (`type`) for unions and interfaces (`interface`) for objects.
+- Avoid `null` — use `undefined` unless integrating with APIs that require `null`.
+- Leverage utility types (`Partial`, `Pick`, `Omit`) instead of rewriting shapes.
+- Use enums or string literal unions for constants.
+- Prefer async/await over `.then()` chaining.
+- Use `readonly` for immutable properties and `const` for variables that don't change.
+- All exported functions and components must have explicit return types.
+- Never ignore errors from promises — always handle or propagate them.
+- Use ESLint + Prettier with consistent formatting.
+
+### React:
+
+- Use functional components with hooks — no class components unless absolutely required.
+- All props must be typed with TypeScript interfaces.
+- Component files must use PascalCase (e.g., MyComponent.tsx).
+- Avoid prop drilling; use Context API or a state management library if necessary.
+- Keep components as stateless as possible; use `useReducer` for complex state.
+- Use `React.memo` for pure components and `useCallback`/`useMemo` for expensive computations or functions passed as props.
+- Forms must use controlled components and validate inputs client-side with user-friendly error messages.
+- Side effects:
+  - Keep `useEffect` dependencies accurate — never disable ESLint hook rules.
+  - Cleanup effects properly to avoid memory leaks.
+- API calls:
+  - Never fetch data directly inside components without cleanup.
+  - Place all API logic in `/services` or `/api` modules and call from components.
+- Error handling:
+  - Use fallback UIs via `ErrorBoundary` or equivalent patterns.
+- Styling:
+  - Use TailwindCSS exclusively for styling overrides or layout adjustments.
+- **UI Components**:
+  - Always use Shadcn UI components for UI elements (buttons, forms, modals, alerts, tables, navigation, etc.).
+  - Components must be installed locally using:
+    yarn shadcn@latest add <component-name>
+    before being imported.
+  - Never import directly from `shadcn-ui` or any npm package — only from the local path `@/components/ui/<component>`.
+  - If a required component does not yet exist, assume it will be generated with the above yarn command.
+  - Do not recreate UI elements with raw HTML if a Shadcn component exists for that purpose.
+  - TailwindCSS utility classes may be used to extend or customize Shadcn components, but never replace their core structure.
+- Accessibility:
+  - Always use semantic HTML tags.
+  - Include appropriate `aria-*` attributes.
+  - Ensure full keyboard navigation support.
+
+### Laravel (PHP)
+
+- Follow PSR-12 coding standards.
+- Use Eloquent ORM efficiently; eager load relationships to avoid N+1 queries.
+- Keep controllers slim; push logic into service classes or actions.
+- Validate all requests with Form Request classes.
+- Use events, listeners, and queues where applicable.
+- Store secrets/config in `.env` — never commit sensitive data.
+
+### Express.js (Node.js)
+
+- Use ES modules (`type: "module"`) or TypeScript.
+- Organize code into `routes`, `controllers`, `services`, and `middleware`.
+- Centralized error handling middleware.
+- Use `express-validator` or Joi for input validation.
+- Secure headers with `helmet`.
+- Log with Winston or Pino.
+
+### Go (Golang)
+
+- Follow official "Effective Go" guidelines.
+- Small, focused functions; avoid side effects unless necessary.
+- Always check and handle returned errors.
+- Close all resources with `defer`.
+- Pass `context.Context` through APIs for timeouts and cancellation.
+- Use interfaces for contracts, but keep them small.
+- Organize packages by domain (`/auth`, `/user`, `/db`).
+- Avoid global variables — inject dependencies.
+- Use `gofmt` and `goimports` before committing.
+- For HTTP APIs:
+  - Return JSON with proper HTTP status codes.
+  - Sanitize and validate inputs.
+  - Log errors meaningfully.
+
+### SQL (PostgreSQL/MySQL)
+
+- Always use parameterized queries to prevent SQL injection.
+- Use indexes for high-read columns but avoid over-indexing.
+- Normalize tables unless denormalization is required for performance.
+- Use migrations for schema changes (Laravel migrations, Go migrate tools).
+
+## 3. BACKEND BEST PRACTICES
+
+- All routes must be versioned (`/api/v1/...`).
+- Validate all inputs server-side, even if validated client-side.
+- Implement consistent error formats for all APIs.
+- Use `.env` for secrets/config.
+- Implement rate limiting for sensitive endpoints.
+
+## 4. SECURITY
+
+- Sanitize all inputs and outputs.
+- HTTPS for all production traffic.
+- Use bcrypt or Argon2 for password hashing.
+- Secure JWT handling (short-lived tokens, refresh tokens).
+- Hide stack traces in production.
+
+## 5. PERFORMANCE
+
+- Cache heavy computations or DB queries when possible.
+- Use pagination or infinite scroll for large datasets.
+- Optimize images and static files.
+- In Go, use goroutines and worker pools for concurrency.
+
+## 6. TESTING
+
+- TypeScript: Use Jest with `ts-jest`.
+- React: Use React Testing Library + Jest.
+- Laravel: Use PHPUnit.
+- Go: Use the built-in `testing` package with table-driven tests.
+- Write tests for:
+  - Core business logic
+  - API endpoints
+  - Edge cases
+- Never merge without tests passing.
+
+## 7. CODE QUALITY
+
+- Lint and format before commit.
+- Keep functions under 50 lines.
+- Avoid deep nesting; return early.
+- Use constants or enums for repeated values.
+- No commented-out dead code in commits.
+
+## 8. DOCUMENTATION
+
+- Every public function and component must have a docstring.
+- Keep README up to date with installation and usage.
+- Maintain Swagger/OpenAPI documentation for APIs.
+
+## 9. AI BEHAVIOR
+
+- Explain reasoning before showing code.
+- If multiple approaches exist, compare pros/cons.
+- Ask clarifying questions when requirements are ambiguous.
+- Check for edge cases and possible bugs before final output.

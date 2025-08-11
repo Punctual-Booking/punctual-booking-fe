@@ -7,6 +7,7 @@ import { TimePicker } from '@/components/ui/time-picker'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { toast } from 'sonner'
 import { Loading } from '@/components/ui/loading'
+import { ImageUpload } from '@/components/common/ImageUpload'
 
 export const BusinessSettings = () => {
   const { t } = useTranslation()
@@ -28,6 +29,24 @@ export const BusinessSettings = () => {
         <CardTitle>{t('admin.settings.business.info')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <label>{t('admin.settings.business.logo')}</label>
+          <ImageUpload
+            id="business-logo"
+            label={t('admin.settings.business.logoUpload')}
+            currentImage={business.logoUrl}
+            onChange={e => {
+              const file = (e.target as HTMLInputElement).files?.[0]
+              if (file) {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                  updateBusinessSettings({ logoUrl: reader.result as string })
+                }
+                reader.readAsDataURL(file)
+              }
+            }}
+          />
+        </div>
         <div className="space-y-2">
           <label>{t('admin.settings.business.name')}</label>
           <Input

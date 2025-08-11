@@ -8,6 +8,7 @@ interface BusinessSettings {
   address: string
   phone: string
   email: string
+  logoUrl?: string
 }
 
 interface BookingSettings {
@@ -65,6 +66,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     address: '123 Main Street, City',
     phone: '+1 (555) 123-4567',
     email: 'contact@beautysalon.com',
+    logoUrl: '',
   },
   booking: {
     minNotice: 24,
